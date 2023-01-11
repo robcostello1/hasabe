@@ -1,0 +1,13 @@
+.Strategies {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+
+}
+
+.Strategies__refresh {
+    margin: 16px auto -10px;
+    display: block !important;
+    opacity: 0.3
+}

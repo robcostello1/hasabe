@@ -1,0 +1,26 @@
+.AddTask__form {
+  width: 25vw;
+}
+
+.AddTask__split {
+  display: flex;
+}
+
+.AddTask__split .AddTask__form {
+  width: 15vw;
+}
+
+.AddTask__form:not(:last-of-type) {
+  margin-right: 24px;
+}
+
+.AddTask__body {
+  background-color: transparent;
+  border-radius: 4px;
+  border: 1px solid rgba(192, 192, 192, 0.35);
+}
+
+/* .AddTask__body .w-md-editor-text {
+  font-size: 18px;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+} */

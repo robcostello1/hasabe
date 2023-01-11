@@ -1,0 +1,7 @@
+.CardButton {
+  min-width: 0 !important;
+}
+
+.CardButton:not(:hover):not(:active) {
+  opacity: 0.7;
+}

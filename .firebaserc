@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "default": "hasabe",
+    "local": "hasabe"
+  },
+  "targets": {},
+  "etags": {}
+}
