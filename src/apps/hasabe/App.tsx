@@ -1,5 +1,4 @@
-import { CircularProgress } from "@mui/material";
-import TaskUi from "./TaskUi";
+import TaskUi from "./components/TaskUi";
 import Theme from "../../components/Theme";
 
 const App = () => {

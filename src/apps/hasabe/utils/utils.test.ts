@@ -36,6 +36,7 @@ describe("moveTaskDown", () => {
   });
 });
 
+// TODO brittle - will be defunct when users can choose their own colors
 describe("getColor", () => {
   it("shows red for bad", () => {
     expect(getColor(21)).toBe("hsla(0, 80%, 40%, 0.5)");

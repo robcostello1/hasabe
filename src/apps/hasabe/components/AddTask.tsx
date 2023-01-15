@@ -12,11 +12,11 @@ import {
   useFormContext,
 } from "react-hook-form-mui";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { EditableTask, UpdateMode } from "./utils/types";
-
 // @ts-ignore
 import MDEditor from "@uiw/react-md-editor";
-import { POINT_SCALE } from "./utils/consts";
+
+import { EditableTask, UpdateMode } from "../utils/types";
+import { POINT_SCALE } from "../utils/consts";
 
 import "./AddTask.css";
 

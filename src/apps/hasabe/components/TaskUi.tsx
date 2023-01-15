@@ -1,13 +1,13 @@
-import "./TaskUi.css";
-
+import { useKeyPressEvent } from "react-use";
 import { Button, Card, CardActions, CardContent, Dialog } from "@mui/material";
 import { CallSplit, Close, Edit } from "@mui/icons-material";
-import { getColor, moveTaskDown, moveTaskUp } from "./utils/utils";
 
 import AddTask from "./AddTask";
 import CardButton from "./CardButton";
-import { useKeyPressEvent } from "react-use";
-import { useTaskMethods } from "./utils/useTaskMethods";
+import { getColor, moveTaskDown, moveTaskUp } from "../utils/utils";
+import { useTaskMethods } from "../utils/useTaskMethods";
+
+import "./TaskUi.css";
 
 function TaskUi() {
   const {
