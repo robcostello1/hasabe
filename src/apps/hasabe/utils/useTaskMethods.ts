@@ -12,13 +12,15 @@ export const useTaskMethods = () => {
   const [addModalOpen, setAddModalOpen] = useToggle(false);
   const [mode, setMode] = useState<UpdateMode>("single");
 
+  /**
+   * As we use an array structure for tasks, we have to map through the array to find and edit
+   * the relevant task. Closure that returns a map function.
+   */
   const iterateEdits = useCallback(
-    (task: Task) => (updatedTask: Task) => {
-      if (updatedTask.id !== currentTaskId) {
-        return updatedTask;
-      }
-      return { ...updatedTask, ...task };
-    },
+    (updatedTask: Task) => (task: Task) =>
+      updatedTask.id !== currentTaskId
+        ? updatedTask
+        : { ...task, ...updatedTask },
     [currentTaskId]
   );
 
