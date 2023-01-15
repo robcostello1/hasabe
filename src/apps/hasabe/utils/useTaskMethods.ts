@@ -1,10 +1,10 @@
-import { useState, useCallback } from "react";
+import { EditableTask, Task, UpdateMode } from "./types";
+import { useCallback, useState } from "react";
 import { useLocalStorage, useToggle } from "react-use";
+
+import { removeTask } from "./utils";
 // @ts-ignore
 import { v4 as uuidv4 } from "uuid";
-
-import { EditableTask, Task, UpdateMode } from "./types";
-import { removeTask } from "./utils";
 
 export type UseTaskMethodProps = {
   onAdd?: (task: Task) => void;

@@ -1,18 +1,19 @@
-import { Button, Card, CardActions, CardContent, Dialog } from "@mui/material";
-import { useKeyPressEvent } from "react-use";
-// @ts-ignore
-import AddTask from "./AddTask";
 import "./TaskUi.css";
-import PouchDB from "pouchdb";
 
+import { Button, Card, CardActions, CardContent, Dialog } from "@mui/material";
 import { CallSplit, Close, Edit } from "@mui/icons-material";
-import CardButton from "./CardButton";
-import { useTaskMethods } from "./utils/useTaskMethods";
 import { getColor, moveTaskDown, moveTaskUp } from "./utils/utils";
-import { DatabaseEnums } from "./utils/enums/database.enums";
-import useTaskRecords from "./utils/useTaskRecords";
+// import useTaskRecords from "./utils/useTaskRecords";
 import { useCallback, useState } from "react";
+
+import AddTask from "./AddTask";
+import CardButton from "./CardButton";
+import { DatabaseEnums } from "./utils/enums/database.enums";
+import PouchDB from "pouchdb";
 import { Task } from "./utils/types";
+import { useKeyPressEvent } from "react-use";
+import { useTaskMethods } from "./utils/useTaskMethods";
+
 interface Props {
   databaseInstance: any;
   metadataInfo: {
@@ -22,14 +23,10 @@ interface Props {
   };
 }
 
-// TODO "sprint" UI
-// Undo
-// TODO groups
-// TODO multi-item selection
 function TaskUi({ databaseInstance, metadataInfo }: Props) {
   const metadataDatabaseInstance = new PouchDB(DatabaseEnums.MetadataDBName);
 
-  const dbTasks: any = useTaskRecords(databaseInstance);
+  // const dbTasks: any = useTaskRecords(databaseInstance);
   const [eventCount, setEventCount] = useState(metadataInfo.eventCount);
 
   const storeEventCount = (num: number) => {
@@ -66,6 +63,8 @@ function TaskUi({ databaseInstance, metadataInfo }: Props) {
     }
     databaseInstance.remove(id, doc._rev);
   }, []);
+
+  console.log(databaseInstance);
 
   const {
     addModalOpen,
