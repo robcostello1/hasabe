@@ -8,6 +8,7 @@ import { getColor, moveTaskDown, moveTaskUp } from "../utils/utils";
 import { useTaskMethods } from "../utils/useTaskMethods";
 
 import "./TaskUi.css";
+import { useMemo } from "react";
 
 function TaskUi() {
   const {
@@ -36,6 +37,11 @@ function TaskUi() {
       setTasks(moveTaskDown(tasks || [], currentTaskId));
     }
   });
+
+  const currentTask = useMemo(
+    () => tasks?.find(({ id }) => currentTaskId === id),
+    [tasks, currentTaskId]
+  );
 
   return (
     <div className="App">
@@ -75,6 +81,7 @@ function TaskUi() {
               style={{
                 backgroundColor: getColor(worryPoints),
               }}
+              // TODO use css
               className={currentTaskId === id ? "Card Card__active" : "Card"}
             >
               <CardContent>{name}</CardContent>
@@ -121,7 +128,7 @@ function TaskUi() {
       >
         <AddTask
           mode={mode}
-          currentTask={tasks?.find(({ id }) => currentTaskId === id)}
+          currentTask={currentTask}
           onClose={handleCloseModal}
           onSplit={handleSplitSubmit}
           onSubmit={handleDefaultSubmit}
