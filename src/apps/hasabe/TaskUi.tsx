@@ -3,69 +3,13 @@ import "./TaskUi.css";
 import { Button, Card, CardActions, CardContent, Dialog } from "@mui/material";
 import { CallSplit, Close, Edit } from "@mui/icons-material";
 import { getColor, moveTaskDown, moveTaskUp } from "./utils/utils";
-// import useTaskRecords from "./utils/useTaskRecords";
-import { useCallback, useState } from "react";
 
 import AddTask from "./AddTask";
 import CardButton from "./CardButton";
-import { DatabaseEnums } from "./utils/enums/database.enums";
-import PouchDB from "pouchdb";
-import { Task } from "./utils/types";
 import { useKeyPressEvent } from "react-use";
 import { useTaskMethods } from "./utils/useTaskMethods";
 
-interface Props {
-  databaseInstance: any;
-  metadataInfo: {
-    nodeId: string;
-    eventCount: number;
-    _rev: string;
-  };
-}
-
-function TaskUi({ databaseInstance, metadataInfo }: Props) {
-  const metadataDatabaseInstance = new PouchDB(DatabaseEnums.MetadataDBName);
-
-  // const dbTasks: any = useTaskRecords(databaseInstance);
-  const [eventCount, setEventCount] = useState(metadataInfo.eventCount);
-
-  const storeEventCount = (num: number) => {
-    setEventCount(num);
-    metadataDatabaseInstance.put({
-      _id: DatabaseEnums.MetadataDBLookupRow,
-      _rev: metadataInfo._rev,
-      eventCount: num,
-      nodeId: metadataInfo.nodeId,
-    });
-  };
-
-  const onAdd = useCallback((task: Task) => {
-    const newCount = eventCount + 1;
-    const document = {
-      _id: task.id,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      ...task,
-    };
-    databaseInstance.put(document);
-    storeEventCount(newCount);
-  }, []);
-
-  const onEdit = useCallback((task: Task) => {}, []);
-
-  const onRemove = useCallback(async (id: string) => {
-    let doc;
-    try {
-      doc = await databaseInstance.get(id);
-    } catch (err) {
-      console.error(err, "props.databaseInstance.get error");
-      return;
-    }
-    databaseInstance.remove(id, doc._rev);
-  }, []);
-
-  console.log(databaseInstance);
-
+function TaskUi() {
   const {
     addModalOpen,
     currentTaskId,
@@ -79,11 +23,7 @@ function TaskUi({ databaseInstance, metadataInfo }: Props) {
     setCurrentTaskId,
     setMode,
     setTasks,
-  } = useTaskMethods({
-    onAdd,
-    onEdit,
-    onRemove,
-  });
+  } = useTaskMethods();
 
   useKeyPressEvent("ArrowUp", () => {
     if (currentTaskId) {

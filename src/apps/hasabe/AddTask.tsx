@@ -1,7 +1,7 @@
 import {
-  DialogContent,
-  DialogActions,
   Button,
+  DialogActions,
+  DialogContent,
   DialogTitle,
 } from "@mui/material";
 import {
@@ -11,12 +11,14 @@ import {
   TextFieldElement,
   useFormContext,
 } from "react-hook-form-mui";
-import { POINT_SCALE } from "./utils/consts";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { EditableTask, UpdateMode } from "./utils/types";
+
 // @ts-ignore
 import MDEditor from "@uiw/react-md-editor";
+import { POINT_SCALE } from "./utils/consts";
+
 import "./AddTask.css";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 const defaultValue: EditableTask = {
   name: "",

@@ -1,4 +1,5 @@
 export const POINT_SCALE = [
+  { id: 0, label: 0 },
   { id: 1, label: 1 },
   { id: 2, label: 2 },
   { id: 3, label: 3 },

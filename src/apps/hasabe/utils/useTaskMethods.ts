@@ -6,21 +6,21 @@ import { removeTask } from "./utils";
 // @ts-ignore
 import { v4 as uuidv4 } from "uuid";
 
-export type UseTaskMethodProps = {
-  onAdd?: (task: Task) => void;
-  onRemove?: (id: string) => void;
-  onEdit?: (task: Task) => void;
-};
-
-export const useTaskMethods = ({
-  onAdd,
-  onRemove,
-  onEdit,
-}: UseTaskMethodProps) => {
+export const useTaskMethods = () => {
   const [currentTaskId, setCurrentTaskId] = useState<string | undefined>();
   const [tasks, setTasks] = useLocalStorage<Task[]>("tasks", []);
   const [addModalOpen, setAddModalOpen] = useToggle(false);
   const [mode, setMode] = useState<UpdateMode>("single");
+
+  const iterateEdits = useCallback(
+    (task: Task) => (updatedTask: Task) => {
+      if (updatedTask.id !== currentTaskId) {
+        return updatedTask;
+      }
+      return { ...updatedTask, ...task };
+    },
+    [currentTaskId]
+  );
 
   const handleCloseModal = useCallback(() => {
     setCurrentTaskId(undefined);
@@ -32,23 +32,9 @@ export const useTaskMethods = ({
     (task: EditableTask) => {
       const newTask = { ...task, id: uuidv4() };
       setTasks([...(tasks || []), newTask]);
-      onAdd?.(newTask);
       handleCloseModal();
     },
     [tasks, handleCloseModal, setTasks]
-  );
-
-  const iterateEdits = useCallback(
-    (task: Task) => (updatedTask: Task) => {
-      const editedTask = { ...updatedTask, ...task };
-      if (updatedTask.id !== currentTaskId) {
-        return updatedTask;
-      }
-      // TODO sideeffect
-      onEdit?.(editedTask);
-      return editedTask;
-    },
-    [onEdit, currentTaskId]
   );
 
   const handleEditTask = useCallback(
@@ -62,7 +48,6 @@ export const useTaskMethods = ({
   const handleRemoveTask = useCallback(
     (id: string) => {
       setTasks(removeTask(id, tasks));
-      onRemove?.(id);
     },
     [tasks, setTasks]
   );
@@ -71,7 +56,6 @@ export const useTaskMethods = ({
     (origTask: Task, newTask: EditableTask) => {
       const finalNewTask = { ...newTask, id: uuidv4() };
       setTasks([...(tasks || []).map(iterateEdits(origTask)), finalNewTask]);
-      onAdd?.(finalNewTask);
     },
     [tasks, currentTaskId, setTasks, iterateEdits]
   );
