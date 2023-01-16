@@ -1,15 +1,13 @@
+import { useMemo } from "react";
 import { useKeyPressEvent } from "react-use";
-import { Button, Card, CardActions, CardContent, Dialog } from "@mui/material";
-import { CallSplit, Close, Edit } from "@mui/icons-material";
+import { Button, Dialog } from "@mui/material";
 
-import AddTask from "./AddTask";
-import CardButton from "./CardButton";
-import { getColor, moveTaskDown, moveTaskUp } from "../utils/utils";
+import { moveTaskDown, moveTaskUp } from "../utils/utils";
 import { useTaskMethods } from "../utils/useTaskMethods";
+import AddTask from "./AddTask";
+import TaskList from "./TaskList";
 
 import "./TaskUi.css";
-import { useMemo } from "react";
-import TaskList from "./TaskList";
 
 function TaskUi() {
   const {

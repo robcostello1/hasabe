@@ -6,30 +6,29 @@ type CardButtonProps = Pick<
   "children" | "onClick" | "startIcon"
 > & { mini?: boolean };
 
-const CardButton = ({ children, startIcon, mini, onClick }: CardButtonProps) =>
-  mini ? (
+const CardButton = ({
+  children,
+  startIcon,
+  mini,
+  onClick,
+}: CardButtonProps) => {
+  const cardProps = {
+    className: "CardButton",
+    color: "inherit",
+    size: "small",
+    variant: "outlined",
+    onClick,
+  } as const;
+
+  return mini ? (
     <Tooltip title={children}>
-      <Button
-        className="CardButton"
-        color="inherit"
-        size="small"
-        variant="outlined"
-        onClick={onClick}
-      >
-        {startIcon}
-      </Button>
+      <Button {...cardProps}>{startIcon}</Button>
     </Tooltip>
   ) : (
-    <Button
-      className="CardButton"
-      color="inherit"
-      size="small"
-      variant="outlined"
-      onClick={onClick}
-      startIcon={startIcon}
-    >
+    <Button {...cardProps} startIcon={startIcon}>
       {children}
     </Button>
   );
+};
 
 export default CardButton;
