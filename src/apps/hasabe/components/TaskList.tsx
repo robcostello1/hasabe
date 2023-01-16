@@ -4,6 +4,8 @@ import { Task } from "../utils/types";
 import { getColor } from "../utils/utils";
 import CardButton from "./CardButton";
 
+import "./TaskList.css";
+
 type TaskListProps = {
   tasks?: Task[];
   currentTaskId?: string;
@@ -24,8 +26,7 @@ const TaskList = ({
   onClickCloseTask,
 }: TaskListProps) => (
   <div
-    // TODO
-    style={{ marginTop: 16 }}
+    className={"ListContainer"}
     onClick={(e) => {
       e.stopPropagation();
       onUnselectTask();
