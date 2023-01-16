@@ -9,6 +9,7 @@ import { useTaskMethods } from "../utils/useTaskMethods";
 
 import "./TaskUi.css";
 import { useMemo } from "react";
+import TaskList from "./TaskList";
 
 function TaskUi() {
   const {
@@ -55,72 +56,22 @@ function TaskUi() {
         Add task
       </Button>
 
-      <div
-        // TODO
-        style={{ marginTop: 16 }}
-        onClick={(e) => {
-          e.stopPropagation();
-          setCurrentTaskId(undefined);
+      <TaskList
+        tasks={tasks}
+        currentTaskId={currentTaskId}
+        onSelectTask={setCurrentTaskId}
+        onUnselectTask={() => setCurrentTaskId(undefined)}
+        onClickEditTask={(id) => {
+          setCurrentTaskId(id);
+          setAddModalOpen(id);
         }}
-      >
-        {tasks?.map(({ id, name, effortPoints, worryPoints }) => (
-          <div
-            key={id}
-            style={{
-              float: "left",
-              marginRight: 16,
-              marginBottom: 16,
-              width: 160 * Math.sqrt(effortPoints),
-              height: 160 * Math.sqrt(effortPoints),
-            }}
-          >
-            <Card
-              onClick={(e) => {
-                e.stopPropagation();
-                setCurrentTaskId(id);
-              }}
-              style={{
-                backgroundColor: getColor(worryPoints),
-              }}
-              // TODO use css
-              className={currentTaskId === id ? "Card Card__active" : "Card"}
-            >
-              <CardContent>{name}</CardContent>
-
-              <CardActions>
-                <CardButton
-                  onClick={() => {
-                    setCurrentTaskId(id);
-                    setAddModalOpen(id);
-                  }}
-                  startIcon={<Edit />}
-                  mini={effortPoints < 3}
-                >
-                  Edit
-                </CardButton>
-                <CardButton
-                  onClick={() => {
-                    setMode("split");
-                    setCurrentTaskId(id);
-                    setAddModalOpen(id);
-                  }}
-                  startIcon={<CallSplit />}
-                  mini={effortPoints < 3}
-                >
-                  Split
-                </CardButton>
-                <CardButton
-                  onClick={() => handleRemoveTask(id)}
-                  startIcon={<Close />}
-                  mini={effortPoints < 3}
-                >
-                  Close
-                </CardButton>
-              </CardActions>
-            </Card>
-          </div>
-        ))}
-      </div>
+        onClickSplitTask={(id) => {
+          setMode("split");
+          setCurrentTaskId(id);
+          setAddModalOpen(id);
+        }}
+        onClickCloseTask={(id) => handleRemoveTask(id)}
+      />
 
       <Dialog
         maxWidth={mode === "split" ? "lg" : undefined}
