@@ -21,6 +21,7 @@ import { POINT_SCALE } from "../utils/consts";
 import "./AddTask.css";
 
 const defaultValue: EditableTask = {
+  type: "task",
   name: "",
   body: "",
   effortPoints: 0,

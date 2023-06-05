@@ -1,28 +1,57 @@
 import { EditableTask, Task, UpdateMode } from "./types";
-import { useCallback, useState } from "react";
-import { useLocalStorage, useToggle } from "react-use";
+import { useCallback, useContext, useEffect, useState } from "react";
+import { useToggle } from "react-use";
 
-import { removeTask } from "./utils";
 // @ts-ignore
 import { v4 as uuidv4 } from "uuid";
+import { DBContext } from "./context";
 
 export const useTaskMethods = () => {
   const [currentTaskId, setCurrentTaskId] = useState<string | undefined>();
-  const [tasks, setTasks] = useLocalStorage<Task[]>("tasks", []);
   const [addModalOpen, setAddModalOpen] = useToggle(false);
   const [mode, setMode] = useState<UpdateMode>("single");
 
-  /**
-   * As we use an array structure for tasks, we have to map through the array to find and edit
-   * the relevant task. Closure that returns a map function.
-   */
-  const iterateEdits = useCallback(
-    (updatedTask: Task) => (task: Task) =>
-      updatedTask.id !== currentTaskId
-        ? updatedTask
-        : { ...task, ...updatedTask },
-    [currentTaskId]
-  );
+  const { localDB } = useContext(DBContext);
+  const [tasks, setTasks] = useState<Task[]>([]);
+
+  const fetchTasks = useCallback(async () => {
+    // Alt = https://pouchdb.com/api.html#query_index
+    const allDocs = await localDB.allDocs({ include_docs: true });
+    const docs = allDocs.rows
+      .map((row) => row.doc)
+      .filter((doc) => doc?.type === "task");
+
+    if (docs !== undefined) {
+      // TODO
+      setTasks(docs as Task[]);
+    }
+  }, [localDB]);
+
+  // Init tasks from localDB
+  useEffect(() => {
+    (async () => {
+      fetchTasks();
+
+      // TODO store for cancelation
+      localDB
+        .changes({
+          since: "now",
+          live: true,
+          include_docs: true,
+        })
+        .on("change", function (change) {
+          if (change.doc?.type === "task") {
+            fetchTasks();
+          }
+        })
+        // .on("complete", function (info) {
+        //   // changes() was canceled
+        // })
+        .on("error", function (err) {
+          console.log(err);
+        });
+    })();
+  }, []);
 
   const handleCloseModal = useCallback(() => {
     setCurrentTaskId(undefined);
@@ -32,8 +61,7 @@ export const useTaskMethods = () => {
 
   const handleAddTask = useCallback(
     (task: EditableTask) => {
-      const newTask = { ...task, id: uuidv4() };
-      setTasks([...(tasks || []), newTask]);
+      localDB.put({ ...task, _id: uuidv4() });
       handleCloseModal();
     },
     [tasks, handleCloseModal, setTasks]
@@ -41,25 +69,25 @@ export const useTaskMethods = () => {
 
   const handleEditTask = useCallback(
     (task: Task) => {
-      setTasks(tasks?.map(iterateEdits(task)));
+      localDB.put(task);
       handleCloseModal();
     },
-    [setTasks, currentTaskId, tasks, handleCloseModal, iterateEdits]
+    [handleCloseModal]
   );
 
-  const handleRemoveTask = useCallback(
-    (id: string) => {
-      setTasks(removeTask(id, tasks));
-    },
-    [tasks, setTasks]
-  );
+  const handleRemoveTask = useCallback((task: Task) => {
+    localDB.remove(
+      // TODO
+      task as Task & { _rev: string }
+    );
+  }, []);
 
   const handleSplitTasks = useCallback(
     (origTask: Task, newTask: EditableTask) => {
-      const finalNewTask = { ...newTask, id: uuidv4() };
-      setTasks([...(tasks || []).map(iterateEdits(origTask)), finalNewTask]);
+      localDB.put(origTask);
+      localDB.put({ ...newTask, _id: uuidv4() });
     },
-    [tasks, currentTaskId, setTasks, iterateEdits]
+    []
   );
 
   const handleSplitSubmit = useCallback(
@@ -75,7 +103,7 @@ export const useTaskMethods = () => {
       if (!currentTaskId) {
         handleAddTask(task);
       } else {
-        handleEditTask({ ...task, id: currentTaskId });
+        handleEditTask({ ...task, _id: currentTaskId });
       }
     },
     [handleAddTask, handleEditTask, currentTaskId]

@@ -32,9 +32,9 @@ const TaskList = ({
       onUnselectTask();
     }}
   >
-    {tasks?.map(({ id, name, effortPoints, worryPoints }) => (
+    {tasks?.map(({ _id, name, effortPoints, worryPoints }) => (
       <div
-        key={id}
+        key={_id}
         style={{
           float: "left",
           marginRight: 16,
@@ -46,32 +46,32 @@ const TaskList = ({
         <Card
           onClick={(e) => {
             e.stopPropagation();
-            onSelectTask(id);
+            onSelectTask(_id);
           }}
           style={{
             backgroundColor: getColor(worryPoints),
           }}
-          className={currentTaskId === id ? "Card Card__active" : "Card"}
+          className={currentTaskId === _id ? "Card Card__active" : "Card"}
         >
           <CardContent>{name}</CardContent>
 
           <CardActions>
             <CardButton
-              onClick={() => onClickEditTask(id)}
+              onClick={() => onClickEditTask(_id)}
               startIcon={<Edit />}
               mini={effortPoints < 3}
             >
               Edit
             </CardButton>
             <CardButton
-              onClick={() => onClickSplitTask(id)}
+              onClick={() => onClickSplitTask(_id)}
               startIcon={<CallSplit />}
               mini={effortPoints < 3}
             >
               Split
             </CardButton>
             <CardButton
-              onClick={() => onClickCloseTask(id)}
+              onClick={() => onClickCloseTask(_id)}
               startIcon={<Close />}
               mini={effortPoints < 3}
             >

@@ -2,9 +2,6 @@ import { filter, findIndex } from "lodash";
 import { POINT_SCALE } from "./consts";
 import { Task } from "./types";
 
-export const removeTask = (id: string, tasks?: Task[]): Task[] =>
-  tasks ? filter(tasks, ({ id: currentId }) => currentId !== id) : [];
-
 export const move = <T>(
   array: T[],
   old_index: number,
@@ -30,13 +27,13 @@ export const moveItem = <T>(
   return move(array, fromIndex, toIndex);
 };
 
-export const moveTaskUp = (tasks: Task[], id: string) => {
-  const fromIndex = findIndex(tasks, (task) => task.id === id);
+export const moveTaskUp = (tasks: Task[], _id: string) => {
+  const fromIndex = findIndex(tasks, (task) => task._id === _id);
   return fromIndex === 0 ? tasks : move(tasks, fromIndex, fromIndex - 1);
 };
 
-export const moveTaskDown = (tasks: Task[], id: string) => {
-  const fromIndex = findIndex(tasks, (task) => task.id === id);
+export const moveTaskDown = (tasks: Task[], _id: string) => {
+  const fromIndex = findIndex(tasks, (task) => task._id === _id);
   return fromIndex === tasks.length - 1
     ? tasks
     : move(tasks, fromIndex, fromIndex + 1);

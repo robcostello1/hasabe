@@ -41,6 +41,7 @@ describe("AddTask", () => {
       <AddTask
         mode="single"
         currentTask={{
+          type: "task",
           name: "Task name",
           body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean feugiat urna eu metus imperdiet aliquet. Phasellus convallis sodales mi ac vehicula.",
           effortPoints: 3,

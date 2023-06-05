@@ -38,7 +38,7 @@ function TaskUi() {
   });
 
   const currentTask = useMemo(
-    () => tasks?.find(({ id }) => currentTaskId === id),
+    () => tasks?.find(({ _id }) => currentTaskId === _id),
     [tasks, currentTaskId]
   );
 
@@ -59,16 +59,21 @@ function TaskUi() {
         currentTaskId={currentTaskId}
         onSelectTask={setCurrentTaskId}
         onUnselectTask={() => setCurrentTaskId(undefined)}
-        onClickEditTask={(id) => {
-          setCurrentTaskId(id);
-          setAddModalOpen(id);
+        onClickEditTask={(_id) => {
+          setCurrentTaskId(_id);
+          setAddModalOpen(_id);
         }}
-        onClickSplitTask={(id) => {
+        onClickSplitTask={(_id) => {
           setMode("split");
-          setCurrentTaskId(id);
-          setAddModalOpen(id);
+          setCurrentTaskId(_id);
+          setAddModalOpen(_id);
         }}
-        onClickCloseTask={(id) => handleRemoveTask(id)}
+        onClickCloseTask={(_id) => {
+          const taskToRemove = tasks.find((task) => task._id === _id);
+          if (taskToRemove) {
+            handleRemoveTask(taskToRemove);
+          }
+        }}
       />
 
       <Dialog

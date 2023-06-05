@@ -55,10 +55,12 @@
     ]
   },
   "devDependencies": {
+    "@stanlemon/react-couchdb-authentication": "^0.8.39",
+    "@stanlemon/react-pouchdb": "^0.4.19",
     "@types/lodash": "^4.14.186",
     "@types/pouchdb": "^6.4.0",
     "@types/react-router-dom": "^5.3.3",
     "@types/uuid": "^8.3.4",
-    "pouchdb": "^7.3.0"
+    "pouchdb": "^7.3.1"
   }
 }
