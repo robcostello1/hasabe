@@ -1,28 +1,24 @@
-import { EditableTask, Task, UpdateMode } from "./types";
-import { useCallback, useState } from "react";
-import { useLocalStorage, useToggle } from "react-use";
-
-import { removeTask } from "./utils";
+import { useCallback, useEffect, useState } from "react";
+import { useToggle } from "react-use";
 // @ts-ignore
 import { v4 as uuidv4 } from "uuid";
 
+import db from "./db";
+import { EditableTask, Task, UpdateMode } from "./types";
+
 export const useTaskMethods = () => {
   const [currentTaskId, setCurrentTaskId] = useState<string | undefined>();
-  const [tasks, setTasks] = useLocalStorage<Task[]>("tasks", []);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [addModalOpen, setAddModalOpen] = useToggle(false);
   const [mode, setMode] = useState<UpdateMode>("single");
 
-  /**
-   * As we use an array structure for tasks, we have to map through the array to find and edit
-   * the relevant task. Closure that returns a map function.
-   */
-  const iterateEdits = useCallback(
-    (updatedTask: Task) => (task: Task) =>
-      updatedTask.id !== currentTaskId
-        ? updatedTask
-        : { ...task, ...updatedTask },
-    [currentTaskId]
-  );
+  useEffect(() => {
+    (async () => {
+      (await db).tasks.find().$.subscribe((tasks) => {
+        setTasks(tasks.map((task) => task.toJSON()));
+      });
+    })();
+  }, []);
 
   const handleCloseModal = useCallback(() => {
     setCurrentTaskId(undefined);
@@ -31,40 +27,51 @@ export const useTaskMethods = () => {
   }, [setAddModalOpen]);
 
   const handleAddTask = useCallback(
-    (task: EditableTask) => {
+    async (task: EditableTask) => {
       const newTask = { ...task, id: uuidv4() };
-      setTasks([...(tasks || []), newTask]);
+      (await db).tasks.insert(newTask);
       handleCloseModal();
     },
-    [tasks, handleCloseModal, setTasks]
+    [handleCloseModal]
   );
 
   const handleEditTask = useCallback(
-    (task: Task) => {
-      setTasks(tasks?.map(iterateEdits(task)));
+    async ({ id, ...task }: Task) => {
+      const oldTask = await (await db).tasks
+        .findOne({ selector: { id } })
+        .exec();
+
+      oldTask.patch(task);
+
       handleCloseModal();
     },
-    [setTasks, currentTaskId, tasks, handleCloseModal, iterateEdits]
+    [handleCloseModal]
   );
 
-  const handleRemoveTask = useCallback(
-    (id: string) => {
-      setTasks(removeTask(id, tasks));
-    },
-    [tasks, setTasks]
-  );
+  const handleRemoveTask = useCallback(async (id: string) => {
+    const task = await (await db).tasks.findOne({ selector: { id } }).exec();
+
+    task.remove();
+  }, []);
 
   const handleSplitTasks = useCallback(
-    (origTask: Task, newTask: EditableTask) => {
+    async ({ id: origId, ...origTask }: Task, newTask: EditableTask) => {
       const finalNewTask = { ...newTask, id: uuidv4() };
-      setTasks([...(tasks || []).map(iterateEdits(origTask)), finalNewTask]);
+      (await db).tasks.insert(finalNewTask);
+
+      const oldTask = await (await db).tasks
+        .findOne({ selector: { id: origId } })
+        .exec();
+
+      oldTask.patch(origTask);
     },
-    [tasks, currentTaskId, setTasks, iterateEdits]
+    [currentTaskId, handleEditTask]
   );
 
   const handleSplitSubmit = useCallback(
     (origTask: EditableTask, newTask: EditableTask) => {
       handleSplitTasks(origTask as Task, newTask);
+
       handleCloseModal();
     },
     [handleSplitTasks, handleCloseModal]

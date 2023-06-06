@@ -1,13 +1,14 @@
+import "./TaskUi.css";
+
 import { useMemo } from "react";
 import { useKeyPressEvent } from "react-use";
+
 import { Button, Dialog } from "@mui/material";
 
-import { moveTaskDown, moveTaskUp } from "../utils/utils";
 import { useTaskMethods } from "../utils/useTaskMethods";
+import { moveTaskDown, moveTaskUp } from "../utils/utils";
 import AddTask from "./AddTask";
 import TaskList from "./TaskList";
-
-import "./TaskUi.css";
 
 function TaskUi() {
   const {
