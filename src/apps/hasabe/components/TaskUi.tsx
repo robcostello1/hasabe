@@ -3,7 +3,7 @@ import "./TaskUi.css";
 import { useCallback, useMemo } from "react";
 import { useKeyPressEvent, useToggle } from "react-use";
 
-import { Button, Dialog } from "@mui/material";
+import { Dialog } from "@mui/material";
 
 import { EditableTask, Task } from "../utils/types";
 import { useTaskMethods } from "../utils/useTaskMethods";
