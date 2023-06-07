@@ -14,7 +14,7 @@ if (process.env.NODE_ENV === "development") {
   addRxPlugin(RxDBDevModePlugin);
 }
 
-const supabaseClient = createClient(
+export const supabaseClient = createClient(
   process.env.REACT_APP_SUPABASE_URL!,
   process.env.REACT_APP_SUPABASE_KEY!
 );
