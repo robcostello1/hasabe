@@ -1,6 +1,5 @@
 import { generateKeyBetween } from "fractional-indexing";
 import { useCallback, useEffect, useState } from "react";
-import { useToggle } from "react-use";
 // @ts-ignore
 import { v4 as uuidv4 } from "uuid";
 
@@ -95,7 +94,7 @@ export const useTaskMethods = () => {
 
       handleEditTask(origTask);
     },
-    [currentTaskId, handleEditTask]
+    [handleEditTask]
   );
 
   const handleMoveTask = useCallback(
@@ -116,7 +115,7 @@ export const useTaskMethods = () => {
       );
       handleEditTask({ id, orderIndex });
     },
-    [tasks]
+    [tasks, handleEditTask]
   );
 
   return {

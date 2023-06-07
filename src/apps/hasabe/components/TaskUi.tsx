@@ -1,6 +1,6 @@
 import "./TaskUi.css";
 
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { useKeyPressEvent, useToggle } from "react-use";
 
 import { Button, Dialog } from "@mui/material";
@@ -30,13 +30,13 @@ function TaskUi({ debug }: { debug?: boolean }) {
   const handleOpenModal = useCallback(() => {
     setCurrentTaskId(undefined);
     setAddModalOpen(true);
-  }, [setAddModalOpen]);
+  }, [setAddModalOpen, setCurrentTaskId]);
 
   const handleCloseModal = useCallback(() => {
     setCurrentTaskId(undefined);
     setAddModalOpen(false);
     setMode("single");
-  }, [setAddModalOpen]);
+  }, [setAddModalOpen, setCurrentTaskId, setMode]);
 
   const handleSplitSubmit = useCallback(
     (origTask: EditableTask, newTask: EditableTask) => {

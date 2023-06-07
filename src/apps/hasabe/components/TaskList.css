@@ -39,6 +39,12 @@
   overflow: hidden;
 }
 
+.ListItem__0, 
+.ListItem__1,
+.ListItem__2 {
+  font-size: 14px;
+}
+
 .ListItem__2 {
   grid-column: span 11;
   grid-row: span 11;
@@ -71,6 +77,8 @@
 
 .TaskName {
   padding: var(--padding) !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .TaskActions {

@@ -1,3 +1,8 @@
+html {
+    font-size: 16px;
+    line-height: 24px;
+}
+
 .Theme {
     min-height: 100vh;
     overflow: auto;
