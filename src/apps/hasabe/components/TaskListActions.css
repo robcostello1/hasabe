@@ -1,0 +1,9 @@
+.TaskListActions {
+    position: sticky;
+    top: 16px;
+    z-index: 100;
+}
+
+.TaskListActions > *:not(:last-child) {
+    margin-right: 8px;
+}

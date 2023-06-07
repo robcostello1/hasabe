@@ -5,11 +5,8 @@ html {
 
 .Theme {
     min-height: 100vh;
-    overflow: auto;
     padding: 8px;
     background-color: rgba(0, 0, 0, 0.817);
-    display: flex;
-    flex-direction: column;
 }
 
 /* Media query at tablet portrait */

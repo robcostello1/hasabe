@@ -1,6 +1,12 @@
 import "./AddTask.css";
 
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import {
   Controller,
   FormContainer,
@@ -21,11 +27,16 @@ import MDEditor from "@uiw/react-md-editor";
 import { POINT_SCALE } from "../utils/consts";
 import { EditableTask, UpdateMode } from "../utils/types";
 
-const defaultValue: EditableTask = {
+type FormValues = Pick<EditableTask, "name" | "body"> & {
+  worryPoints: "" | number;
+  effortPoints: "" | number;
+};
+
+const defaultValue: FormValues = {
   name: "",
   body: "",
-  effortPoints: 0,
-  worryPoints: 0,
+  worryPoints: "",
+  effortPoints: "",
 };
 
 type Props = {
@@ -39,7 +50,7 @@ type Props = {
 const AddTaskForm = ({
   onChange,
 }: {
-  onChange?: Dispatch<SetStateAction<EditableTask>>;
+  onChange?: Dispatch<SetStateAction<FormValues>>;
 }) => {
   const { getValues, formState } = useFormContext<EditableTask>();
 
@@ -74,19 +85,23 @@ const AddTaskForm = ({
       <SelectElement
         name="effortPoints"
         label="Effort"
-        options={POINT_SCALE}
+        options={[...POINT_SCALE, { value: "", label: "" }]}
         fullWidth
       />
 
       <SelectElement
         name="worryPoints"
         label="Worry"
-        options={POINT_SCALE}
+        options={[...POINT_SCALE, { value: "", label: "" }]}
         fullWidth
       />
     </>
   );
 };
+
+const valuesValidate = (values: FormValues): values is EditableTask =>
+  typeof values.worryPoints === "number" &&
+  typeof values.effortPoints === "number";
 
 export default function AddTask({
   mode,
@@ -95,16 +110,40 @@ export default function AddTask({
   onSubmit,
   onSplit,
 }: Props) {
-  const [splitOrig, setSplitOrig] = useState(currentTask || defaultValue);
-  const [splitNew, setSplitNew] = useState({
+  const [splitOrig, setSplitOrig] = useState<FormValues>(currentTask!);
+  const [splitNew, setSplitNew] = useState<FormValues>({
     ...defaultValue,
     worryPoints: currentTask?.worryPoints || defaultValue.worryPoints,
   });
 
+  const handleSubmit = useCallback(
+    (values: FormValues) => {
+      if (valuesValidate(values)) {
+        onSubmit(values);
+        return;
+      }
+      // TODO show form warnings
+      console.warn("Could not submit task: missing points");
+    },
+    [onSubmit]
+  );
+
+  const handleSplit = useCallback(
+    (origTask: FormValues, newTask: FormValues) => {
+      if (valuesValidate(origTask) && valuesValidate(newTask)) {
+        onSplit(origTask, newTask);
+        return;
+      }
+      // TODO show form warnings
+      console.warn("Could not submit task: missing points");
+    },
+    [onSplit]
+  );
+
   return mode === "single" ? (
     <FormContainer
       defaultValues={currentTask || defaultValue}
-      onSuccess={onSubmit}
+      onSuccess={handleSubmit}
     >
       <DialogTitle>{currentTask ? "Edit" : "Add"} task</DialogTitle>
 
@@ -113,7 +152,7 @@ export default function AddTask({
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={() => onClose()}>Cancel</Button>
+        <Button onClick={onClose}>Cancel</Button>
         <Button variant="contained" type="submit">
           Save
         </Button>
@@ -141,7 +180,7 @@ export default function AddTask({
         <Button onClick={() => onClose()}>Cancel</Button>
         <Button
           variant="contained"
-          onClick={() => onSplit(splitOrig, splitNew)}
+          onClick={() => handleSplit(splitOrig, splitNew)}
         >
           Split
         </Button>

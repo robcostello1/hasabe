@@ -9,6 +9,7 @@ import { EditableTask, Task } from "../utils/types";
 import { useTaskMethods } from "../utils/useTaskMethods";
 import AddTask from "./AddTask";
 import TaskList from "./TaskList";
+import TaskListActions from "./TaskListActions";
 
 function TaskUi({ debug }: { debug?: boolean }) {
   const [addModalOpen, setAddModalOpen] = useToggle(false);
@@ -63,14 +64,16 @@ function TaskUi({ debug }: { debug?: boolean }) {
     [handleAddTask, handleEditTask, currentTaskId, handleCloseModal]
   );
 
-  useKeyPressEvent("ArrowUp", () => {
-    if (currentTaskId) {
+  useKeyPressEvent("ArrowUp", (event) => {
+    if (currentTaskId && !addModalOpen) {
+      event.preventDefault();
       handleMoveTask(currentTaskId, -1);
     }
   });
 
-  useKeyPressEvent("ArrowDown", () => {
-    if (currentTaskId) {
+  useKeyPressEvent("ArrowDown", (event) => {
+    if (currentTaskId && !addModalOpen) {
+      event.preventDefault();
       handleMoveTask(currentTaskId, 1);
     }
   });
@@ -82,33 +85,12 @@ function TaskUi({ debug }: { debug?: boolean }) {
 
   return (
     <div className="App">
-      <Button variant="contained" onClick={handleOpenModal}>
-        Add task
-      </Button>
-      {debug && (
-        <>
-          <Button variant="outlined" onClick={handleResetOrder}>
-            Reset order
-          </Button>
-          <Button
-            variant="outlined"
-            onClick={() =>
-              handleAddTask({
-                name: Math.round(Math.random() * 100000).toString(),
-                effortPoints: [1, 2, 3, 5, 8, 13, 21][
-                  Math.floor(Math.random() * 7)
-                ],
-                worryPoints: [1, 2, 3, 5, 8, 13, 21][
-                  Math.floor(Math.random() * 7)
-                ],
-                body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae elit libero, a pharetra augue. Nullam id dolor id nibh ultricies vehicula ut id elit.",
-              })
-            }
-          >
-            Add random task
-          </Button>
-        </>
-      )}
+      <TaskListActions
+        handleOpenModal={handleOpenModal}
+        handleResetOrder={handleResetOrder}
+        handleAddTask={handleAddTask}
+        debug={debug}
+      />
 
       <TaskList
         tasks={tasks}
