@@ -1,10 +1,10 @@
-import TaskUi from "./components/TaskUi";
 import Theme from "../../components/Theme";
+import TaskUi from "./components/TaskUi";
 
 const App = () => {
   return (
     <Theme>
-      <TaskUi />
+      <TaskUi debug={true} />
     </Theme>
   );
 };

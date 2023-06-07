@@ -1,10 +1,32 @@
 .Theme {
     min-height: 100vh;
     overflow: auto;
-    padding: 32px;
+    padding: 8px;
     background-color: rgba(0, 0, 0, 0.817);
     display: flex;
     flex-direction: column;
+}
+
+/* Media query at tablet portrait */
+@media (min-width: 768px) {
+  .Theme {
+    padding: 12px;
+  }
+}
+
+/* Media query at desktop */
+@media (min-width: 1024px) {
+    .Theme {
+      padding: 16px;
+    }
+  
+}
+
+/* Media query at large desktop */
+@media (min-width: 1440px) {
+    .Theme {
+      padding: 24px;
+    }
 }
 
 .Theme > * {

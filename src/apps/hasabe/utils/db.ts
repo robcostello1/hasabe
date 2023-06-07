@@ -46,12 +46,15 @@ const setupDB = async () => {
     worryPoints: {
       type: "number",
     },
+    orderIndex: {
+      type: "string",
+    },
   };
 
   // Create a collection matching your Supabase table structure.
   const schema = {
     title: "tasks schema",
-    version: 1,
+    version: 4,
     primaryKey: "id",
     type: "object",
     properties,
@@ -76,6 +79,15 @@ const setupDB = async () => {
         1: function (oldDoc) {
           return oldDoc;
         },
+        2: function (oldDoc) {
+          return oldDoc;
+        },
+        3: function (oldDoc) {
+          return oldDoc;
+        },
+        4: function ({ order, ...oldDoc }) {
+          return { ...oldDoc, orderIndex: order };
+        },
       },
     },
   });
@@ -93,8 +105,10 @@ const setupDB = async () => {
     //    * might want to re-create the entire RxDB from scratch in that case or have one
     //    * RxDB per user ID (you could add the user ID to the RxDB name).
     //    */
-    replicationIdentifier: "rc" + process.env.REACT_APP_SUPABASE_URL, // TODO: Add Supabase user ID?
-    pull: {}, // If absent, no data is pulled from Supabase
+    replicationIdentifier: "rc1.2" + process.env.REACT_APP_SUPABASE_URL, // TODO: Add Supabase user ID?
+    pull: {
+      realtimePostgresChanges: false,
+    }, // If absent, no data is pulled from Supabase
     push: {}, // If absent, no changes are pushed to Supabase
   });
 

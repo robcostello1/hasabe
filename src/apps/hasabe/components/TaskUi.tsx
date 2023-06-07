@@ -1,40 +1,77 @@
 import "./TaskUi.css";
 
-import { useMemo } from "react";
-import { useKeyPressEvent } from "react-use";
+import { useCallback, useEffect, useMemo } from "react";
+import { useKeyPressEvent, useToggle } from "react-use";
 
 import { Button, Dialog } from "@mui/material";
 
+import { EditableTask, Task } from "../utils/types";
 import { useTaskMethods } from "../utils/useTaskMethods";
-import { moveTaskDown, moveTaskUp } from "../utils/utils";
 import AddTask from "./AddTask";
 import TaskList from "./TaskList";
 
-function TaskUi() {
+function TaskUi({ debug }: { debug?: boolean }) {
+  const [addModalOpen, setAddModalOpen] = useToggle(false);
+
   const {
-    addModalOpen,
     currentTaskId,
     mode,
     tasks,
-    handleCloseModal,
-    handleDefaultSubmit,
     handleRemoveTask,
-    handleSplitSubmit,
-    setAddModalOpen,
+    handleAddTask,
+    handleEditTask,
+    handleSplitTasks,
+    handleMoveTask,
+    handleResetOrder,
     setCurrentTaskId,
     setMode,
-    setTasks,
   } = useTaskMethods();
+
+  const handleOpenModal = useCallback(() => {
+    setCurrentTaskId(undefined);
+    setAddModalOpen(true);
+  }, [setAddModalOpen]);
+
+  const handleCloseModal = useCallback(() => {
+    setCurrentTaskId(undefined);
+    setAddModalOpen(false);
+    setMode("single");
+  }, [setAddModalOpen]);
+
+  const handleSplitSubmit = useCallback(
+    (origTask: EditableTask, newTask: EditableTask) => {
+      handleSplitTasks(origTask as Task, newTask);
+
+      handleCloseModal();
+    },
+    [handleSplitTasks, handleCloseModal]
+  );
+
+  const handleDefaultSubmit = useCallback(
+    (task: EditableTask) => {
+      if (!currentTaskId) {
+        handleAddTask(task);
+      } else {
+        handleEditTask({
+          ...task,
+          id: currentTaskId,
+        });
+      }
+
+      handleCloseModal();
+    },
+    [handleAddTask, handleEditTask, currentTaskId, handleCloseModal]
+  );
 
   useKeyPressEvent("ArrowUp", () => {
     if (currentTaskId) {
-      setTasks(moveTaskUp(tasks || [], currentTaskId));
+      handleMoveTask(currentTaskId, -1);
     }
   });
 
   useKeyPressEvent("ArrowDown", () => {
     if (currentTaskId) {
-      setTasks(moveTaskDown(tasks || [], currentTaskId));
+      handleMoveTask(currentTaskId, 1);
     }
   });
 
@@ -45,15 +82,33 @@ function TaskUi() {
 
   return (
     <div className="App">
-      <Button
-        variant="contained"
-        onClick={() => {
-          setCurrentTaskId(undefined);
-          setAddModalOpen();
-        }}
-      >
+      <Button variant="contained" onClick={handleOpenModal}>
         Add task
       </Button>
+      {debug && (
+        <>
+          <Button variant="outlined" onClick={handleResetOrder}>
+            Reset order
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={() =>
+              handleAddTask({
+                name: Math.round(Math.random() * 100000).toString(),
+                effortPoints: [1, 2, 3, 5, 8, 13, 21][
+                  Math.floor(Math.random() * 7)
+                ],
+                worryPoints: [1, 2, 3, 5, 8, 13, 21][
+                  Math.floor(Math.random() * 7)
+                ],
+                body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae elit libero, a pharetra augue. Nullam id dolor id nibh ultricies vehicula ut id elit.",
+              })
+            }
+          >
+            Add random task
+          </Button>
+        </>
+      )}
 
       <TaskList
         tasks={tasks}

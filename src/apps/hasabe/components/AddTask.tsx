@@ -1,9 +1,6 @@
-import {
-  Button,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-} from "@mui/material";
+import "./AddTask.css";
+
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
   Controller,
   FormContainer,
@@ -11,14 +8,18 @@ import {
   TextFieldElement,
   useFormContext,
 } from "react-hook-form-mui";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+
+import {
+  Button,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from "@mui/material";
 // @ts-ignore
 import MDEditor from "@uiw/react-md-editor";
 
-import { EditableTask, UpdateMode } from "../utils/types";
 import { POINT_SCALE } from "../utils/consts";
-
-import "./AddTask.css";
+import { EditableTask, UpdateMode } from "../utils/types";
 
 const defaultValue: EditableTask = {
   name: "",
@@ -55,11 +56,7 @@ const AddTaskForm = ({
       <div style={{ marginBottom: 32 }}>
         <Controller
           name="body"
-          render={({
-            field: { onChange, onBlur, value, name, ref },
-            fieldState: { invalid, isTouched, isDirty, error },
-            formState,
-          }) => (
+          render={({ field: { onChange, value } }) => (
             <MDEditor
               hideToolbar
               preview="edit"
@@ -109,7 +106,7 @@ export default function AddTask({
       defaultValues={currentTask || defaultValue}
       onSuccess={onSubmit}
     >
-      <DialogTitle>{currentTask ? "Add" : "Edit"} task</DialogTitle>
+      <DialogTitle>{currentTask ? "Edit" : "Add"} task</DialogTitle>
 
       <DialogContent className="AddTask__form">
         <AddTaskForm />

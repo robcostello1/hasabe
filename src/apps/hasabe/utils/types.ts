@@ -4,8 +4,9 @@ export type Task = {
   body: string;
   effortPoints: number;
   worryPoints: number;
+  orderIndex: string;
 };
 
-export type EditableTask = Omit<Task, "id">;
+export type EditableTask = Omit<Task, "id" | "orderIndex">;
 
 export type UpdateMode = "single" | "split";

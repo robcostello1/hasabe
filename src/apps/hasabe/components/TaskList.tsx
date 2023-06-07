@@ -1,10 +1,15 @@
-import { Edit, CallSplit, Close } from "@mui/icons-material";
-import { Card, CardContent, CardActions } from "@mui/material";
+import "./TaskList.css";
+
+import { motion } from "framer-motion";
+import { useMemo, useRef } from "react";
+
+import { CallSplit, Close, Edit } from "@mui/icons-material";
+import { Card, CardActions, CardContent } from "@mui/material";
+
+import { pack } from "../utils/packing";
 import { Task } from "../utils/types";
 import { getColor } from "../utils/utils";
 import CardButton from "./CardButton";
-
-import "./TaskList.css";
 
 type TaskListProps = {
   tasks?: Task[];
@@ -24,64 +29,64 @@ const TaskList = ({
   onClickEditTask,
   onClickSplitTask,
   onClickCloseTask,
-}: TaskListProps) => (
-  <div
-    className={"ListContainer"}
-    onClick={(e) => {
-      e.stopPropagation();
-      onUnselectTask();
-    }}
-  >
-    {tasks?.map(({ id, name, effortPoints, worryPoints }) => (
-      <div
-        key={id}
-        style={{
-          float: "left",
-          marginRight: 16,
-          marginBottom: 16,
-          width: 160 * Math.sqrt(effortPoints),
-          height: 160 * Math.sqrt(effortPoints),
-        }}
-      >
-        <Card
-          onClick={(e) => {
-            e.stopPropagation();
-            onSelectTask(id);
-          }}
-          style={{
-            backgroundColor: getColor(worryPoints),
-          }}
-          className={currentTaskId === id ? "Card Card__active" : "Card"}
-        >
-          <CardContent>{name}</CardContent>
+}: TaskListProps) => {
+  const containerRef = useRef<HTMLDivElement>(null);
 
-          <CardActions>
-            <CardButton
-              onClick={() => onClickEditTask(id)}
-              startIcon={<Edit />}
-              mini={effortPoints < 3}
-            >
-              Edit
-            </CardButton>
-            <CardButton
-              onClick={() => onClickSplitTask(id)}
-              startIcon={<CallSplit />}
-              mini={effortPoints < 3}
-            >
-              Split
-            </CardButton>
-            <CardButton
-              onClick={() => onClickCloseTask(id)}
-              startIcon={<Close />}
-              mini={effortPoints < 3}
-            >
-              Close
-            </CardButton>
-          </CardActions>
-        </Card>
-      </div>
-    ))}
-  </div>
-);
+  return (
+    <div
+      ref={containerRef}
+      className={"ListContainer"}
+      onClick={(e) => {
+        e.stopPropagation();
+        onUnselectTask();
+      }}
+    >
+      {tasks?.map(({ id, name, effortPoints, worryPoints }) => (
+        <motion.div
+          layoutId={id}
+          className={`ListItem ListItem__${effortPoints}`}
+          key={id}
+        >
+          <Card
+            onClick={(e) => {
+              e.stopPropagation();
+              onSelectTask(id);
+            }}
+            style={{
+              backgroundColor: getColor(worryPoints),
+            }}
+            className={currentTaskId === id ? "Card Card__active" : "Card"}
+          >
+            <CardContent className="TaskName">{name}</CardContent>
+
+            <CardActions className="TaskActions">
+              <CardButton
+                onClick={() => onClickEditTask(id)}
+                startIcon={<Edit />}
+                mini={effortPoints < 3}
+              >
+                Edit
+              </CardButton>
+              <CardButton
+                onClick={() => onClickSplitTask(id)}
+                startIcon={<CallSplit />}
+                mini={effortPoints < 3}
+              >
+                Split
+              </CardButton>
+              <CardButton
+                onClick={() => onClickCloseTask(id)}
+                startIcon={<Close />}
+                mini={effortPoints < 3}
+              >
+                Close
+              </CardButton>
+            </CardActions>
+          </Card>
+        </motion.div>
+      ))}
+    </div>
+  );
+};
 
 export default TaskList;
