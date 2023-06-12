@@ -1,5 +1,6 @@
 .AddTask__form {
-  width: 25vw;
+  width: 80vw;
+  max-width: 500px;
 }
 
 .AddTask__split {
@@ -7,10 +8,11 @@
 }
 
 .AddTask__split .AddTask__form {
-  width: 15vw;
+  width: 40vw;
+  max-width: 300px;
 }
 
-.AddTask__form:not(:last-of-type) {
+.AddTask__split .AddTask__form:not(:last-of-type) {
   margin-right: 24px;
 }
 
