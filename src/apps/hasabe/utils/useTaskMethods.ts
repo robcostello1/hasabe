@@ -113,6 +113,7 @@ export const useTaskMethods = () => {
         tasks[targetIndexLeft]?.orderIndex,
         tasks[targetIndexRight]?.orderIndex
       );
+
       handleEditTask({ id, orderIndex });
     },
     [tasks, handleEditTask]
