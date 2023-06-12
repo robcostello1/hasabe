@@ -8,29 +8,6 @@
   grid-auto-rows: auto;
 }
 
-/* Media query at tablet portrait */
-@media (min-width: 768px) {
-  .ListContainer {
-    --padding: 8px;
-    margin: 8px -8px;
-    grid-template-columns: repeat(65, minmax(0, 1fr));
-  }
-}
-
-/* Media query at desktop */
-@media (min-width: 1024px) {
-  .ListContainer {
-    grid-template-columns: repeat(80, minmax(0, 1fr));
-  }
-}
-
-/* Media query at large desktop */
-@media (min-width: 1440px) {
-  .ListContainer {
-    grid-template-columns: repeat(100, minmax(0, 1fr));
-  }
-}
-
 .ListItem {
   padding: var(--padding);
   grid-column: span 8;
@@ -87,4 +64,35 @@
 
 .TaskActions>:not(:first-of-type) {
   margin-left: var(--padding) !important;
+}
+
+.TaskActionLabel {
+  display: none;
+}
+
+/* Media query at tablet portrait */
+@media (min-width: 768px) {
+  .ListContainer {
+    --padding: 8px;
+    margin: 8px -8px;
+    grid-template-columns: repeat(65, minmax(0, 1fr));
+  }
+}
+
+/* Media query at desktop */
+@media (min-width: 1024px) {
+  .ListContainer {
+    grid-template-columns: repeat(80, minmax(0, 1fr));
+  }
+}
+
+/* Media query at large desktop */
+@media (min-width: 1440px) {
+  .ListContainer {
+    grid-template-columns: repeat(100, minmax(0, 1fr));
+  }
+
+  .TaskActionLabel {
+    display: inline-block;
+  }
 }

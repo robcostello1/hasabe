@@ -64,21 +64,21 @@ const TaskList = ({
                 startIcon={<Edit />}
                 mini={effortPoints < 3}
               >
-                Edit
+                <span className="TaskActionLabel">Edit</span>
               </CardButton>
               <CardButton
                 onClick={() => onClickSplitTask(id)}
                 startIcon={<CallSplit />}
                 mini={effortPoints < 3}
               >
-                Split
+                <span className="TaskActionLabel">Split</span>
               </CardButton>
               <CardButton
                 onClick={() => onClickCloseTask(id)}
                 startIcon={<Close />}
                 mini={effortPoints < 3}
               >
-                Close
+                <span className="TaskActionLabel">Close</span>
               </CardButton>
             </CardActions>
           </Card>
