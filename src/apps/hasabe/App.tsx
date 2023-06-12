@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import Theme from "../../components/Theme";
 import { AuthProvider } from "./components/Auth/AuthContext";
 import AuthWrapper from "./components/Auth/AuthWrapper";

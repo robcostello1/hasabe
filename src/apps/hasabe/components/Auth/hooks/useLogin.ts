@@ -27,7 +27,7 @@ export const useLogin = ({ onSuccess }: UseLoginProps) => {
         setLoginError(undefined);
       }
     },
-    []
+    [onSuccess, setAuthenticated]
   );
 
   return {

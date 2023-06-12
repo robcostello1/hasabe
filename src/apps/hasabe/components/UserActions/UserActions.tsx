@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { AccountCircle } from "@mui/icons-material";
-import { IconButton, Menu, MenuItem, MenuList } from "@mui/material";
+import { IconButton, Menu, MenuItem } from "@mui/material";
 
 import { useLogout } from "../Auth/hooks";
 

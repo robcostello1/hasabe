@@ -24,7 +24,7 @@ export const useLogout = ({ onSuccess }: UseLogoutProps) => {
       setAuthenticated(false);
       setLogoutError(undefined);
     }
-  }, []);
+  }, [onSuccess, setAuthenticated]);
 
   return {
     logoutError,

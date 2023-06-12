@@ -7,10 +7,10 @@ import { Alert, Button } from "@mui/material";
 import { useLogin } from "../hooks";
 
 type LoginProps = {
-  onSuccess: () => void;
+  onSuccess?: () => void;
 };
 
-const Login = () => {
+const Login = (_: LoginProps) => {
   const { handleLogin, loginError } = useLogin({});
 
   return (
