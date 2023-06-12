@@ -1,19 +1,20 @@
 import { useState } from "react";
 
 import Theme from "../../components/Theme";
-import Login from "./components/Login";
+import { AuthProvider } from "./components/Auth/AuthContext";
+import AuthWrapper from "./components/Auth/AuthWrapper";
+import Login from "./components/Auth/Login";
 import TaskUi from "./components/TaskUi";
 
 const App = () => {
-  const [userAuthenticated, setUserAuthenticated] = useState(false);
   return (
-    <Theme>
-      {userAuthenticated ? (
-        <TaskUi />
-      ) : (
-        <Login onSuccess={() => setUserAuthenticated(true)} />
-      )}
-    </Theme>
+    <AuthProvider>
+      <Theme>
+        <AuthWrapper unauthenticatedFallback={<Login />}>
+          <TaskUi />
+        </AuthWrapper>
+      </Theme>
+    </AuthProvider>
   );
 };
 
