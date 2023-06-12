@@ -10,7 +10,7 @@ export const removeTask = (id: string, tasks?: Task[]): Task[] =>
 export const getColor = (
   points: number,
   color1 = "#034732",
-  color2 = "#C32B09"
+  color2 = "#a62508"
 ) => {
   const maxPoints = POINT_SCALE[POINT_SCALE.length - 1].id;
 
@@ -18,5 +18,8 @@ export const getColor = (
   const redgreen = color.range(color2, {
     space: "hsl",
   });
-  return redgreen(Math.sqrt(points / maxPoints)).toString();
+
+  const value =
+    (Math.cbrt(points / maxPoints) + Math.sqrt(points / maxPoints)) / 2;
+  return redgreen(value).toString();
 };
