@@ -15,8 +15,11 @@ export const useSession = ({ onSuccess }: UseSessionProps) => {
     (async () => {
       const { data, error } = await supabaseClient.auth.getSession();
 
-      if (error) {
-        console.error(error);
+      if (data.session === null) {
+        if (error) {
+          console.error(error);
+        }
+
         setSession(null);
         return;
       }
