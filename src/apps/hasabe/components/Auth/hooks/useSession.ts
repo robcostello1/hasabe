@@ -5,7 +5,7 @@ import { Session } from "@supabase/supabase-js";
 import { supabaseClient } from "../../../utils/db";
 
 type UseSessionProps = {
-  onSuccess?: () => void;
+  onSuccess?: (session: Session) => void;
 };
 
 export const useSession = ({ onSuccess }: UseSessionProps) => {
@@ -23,7 +23,7 @@ export const useSession = ({ onSuccess }: UseSessionProps) => {
         setSession(null);
         return;
       }
-      onSuccess?.();
+      onSuccess?.(data.session);
       setSession(data.session);
     })();
   }, [onSuccess]);
