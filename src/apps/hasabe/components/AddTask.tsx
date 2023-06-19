@@ -52,13 +52,15 @@ const AddTaskForm = ({
 }: {
   onChange?: Dispatch<SetStateAction<FormValues>>;
 }) => {
-  const { getValues, formState } = useFormContext<EditableTask>();
+  const { watch } = useFormContext<EditableTask>();
+  const values = JSON.stringify(watch());
 
   useEffect(() => {
     if (onChange) {
-      onChange(getValues());
+      // TODO - this is a bit hacky, but it works for now
+      onChange(JSON.parse(values));
     }
-  }, [formState, getValues, onChange]);
+  }, [values, onChange]);
 
   return (
     <>
@@ -130,6 +132,8 @@ export default function AddTask({
 
   const handleSplit = useCallback(
     (origTask: FormValues, newTask: FormValues) => {
+      console.log("VALUES", origTask, newTask);
+
       if (valuesValidate(origTask) && valuesValidate(newTask)) {
         onSplit(origTask, newTask);
         return;
