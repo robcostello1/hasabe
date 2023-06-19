@@ -1,34 +1,38 @@
-html {
-    font-size: 16px;
-    line-height: 24px;
-}
 
-.Theme {
-    min-height: 100vh;
-    padding: 8px;
-    background-color: rgba(0, 0, 0, 0.817);
+:root {
+  font-size: 16px;
+  line-height: 24px;
+  --app-padding: 8px;
+  --color-background: #1b1917;
+  --color-background-trans: #1b1917aa;
+  color: white;
 }
 
 /* Media query at tablet portrait */
 @media (min-width: 768px) {
-  .Theme {
-    padding: 12px;
-  }
+    :root {
+        --app-padding: 12px;
+    }
 }
 
 /* Media query at desktop */
 @media (min-width: 1024px) {
-    .Theme {
-      padding: 16px;
+    :root {
+        --app-padding: 16px;
     }
-  
 }
 
 /* Media query at large desktop */
 @media (min-width: 1440px) {
-    .Theme {
-      padding: 24px;
+    :root {
+        --app-padding: 24px;
     }
+}
+
+.Theme {
+    min-height: 100vh;
+    padding: var(--app-padding);
+    background-color: var(--color-background);
 }
 
 .Theme > * {

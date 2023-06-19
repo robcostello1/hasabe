@@ -1,42 +1,30 @@
 import { generateKeyBetween } from "fractional-indexing";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 // @ts-ignore
 import { v4 as uuidv4 } from "uuid";
 
-import db from "./db";
-import { EditableTask, Task, UpdateMode } from "./types";
+import db from "../../../utils/db";
+import { useSelect } from "../../../utils/hooks";
+import { EditableTask, Task, UpdateMode } from "../../../utils/types";
 
 export const useTaskMethods = () => {
   const [currentTaskId, setCurrentTaskId] = useState<string | undefined>();
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const tasksTable = useMemo(async () => (await db).tasks, []);
+  const tasks = useSelect<Task>(tasksTable, { sort: [{ orderIndex: "asc" }] });
   const [mode, setMode] = useState<UpdateMode>("single");
   const [highestOrderIndex, setHighestOrderIndex] = useState<string | null>(
     null
   );
 
-  useEffect(() => {
-    console.log(highestOrderIndex);
-  }, [highestOrderIndex]);
-
   // Get highest order index on mount
   useEffect(() => {
     (async () => {
-      const highestItem = await (await db).tasks
+      const highestItem = await (await tasksTable)
         .findOne({ sort: [{ orderIndex: "desc" }] })
         .exec();
       setHighestOrderIndex(highestItem?.orderIndex);
     })();
   }, [tasks]);
-
-  useEffect(() => {
-    (async () => {
-      (await db).tasks
-        .find({ sort: [{ orderIndex: "asc" }] })
-        .$.subscribe((tasks) => {
-          setTasks(tasks.map((task) => task.toJSON()));
-        });
-    })();
-  }, []);
 
   const handleResetOrder = useCallback(async () => {
     let orderIndex: string | null = null;
@@ -46,7 +34,7 @@ export const useTaskMethods = () => {
     });
 
     newTaskOrder.forEach(async ({ orderIndex, id }) => {
-      const taskToEdit = await (await db).tasks
+      const taskToEdit = await (await tasksTable)
         .findOne({ selector: { id } })
         .exec();
 
@@ -65,14 +53,14 @@ export const useTaskMethods = () => {
         orderIndex,
         id: uuidv4(),
       };
-      (await db).tasks.insert(newTask);
+      (await tasksTable).insert(newTask);
     },
     [highestOrderIndex]
   );
 
   const handleEditTask = useCallback(
     async ({ id, ...task }: Omit<Partial<Task>, "id"> & Pick<Task, "id">) => {
-      const oldTask = await (await db).tasks
+      const oldTask = await (await tasksTable)
         .findOne({ selector: { id } })
         .exec();
 
@@ -82,7 +70,7 @@ export const useTaskMethods = () => {
   );
 
   const handleRemoveTask = useCallback(async (id: string) => {
-    const task = await (await db).tasks.findOne({ selector: { id } }).exec();
+    const task = await (await tasksTable).findOne({ selector: { id } }).exec();
 
     task.remove();
   }, []);
@@ -90,7 +78,7 @@ export const useTaskMethods = () => {
   const handleSplitTasks = useCallback(
     async (origTask: Task, newTask: EditableTask) => {
       const finalNewTask = { ...newTask, id: uuidv4() };
-      (await db).tasks.insert(finalNewTask);
+      (await tasksTable).insert(finalNewTask);
 
       handleEditTask(origTask);
     },

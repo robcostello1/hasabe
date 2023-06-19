@@ -3,11 +3,13 @@ import "./TaskUi.css";
 import { useCallback, useMemo } from "react";
 import { useKeyPressEvent, useToggle } from "react-use";
 
+import { Tag } from "@mui/icons-material";
 import { Dialog } from "@mui/material";
 
-import { EditableTask, Task } from "../utils/types";
-import { useTaskMethods } from "../utils/useTaskMethods";
+import { EditableTask, Task } from "../../utils/types";
+import { TagList } from "../Tags";
 import AddTask from "./AddTask";
+import { useTaskMethods } from "./hooks";
 import TaskList from "./TaskList";
 import TaskListActions from "./TaskListActions";
 
@@ -91,6 +93,8 @@ function TaskUi({ debug }: { debug?: boolean }) {
         handleAddTask={handleAddTask}
         debug={debug}
       />
+
+      <TagList />
 
       <TaskList
         tasks={tasks}

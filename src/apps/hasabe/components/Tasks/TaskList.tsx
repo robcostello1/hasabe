@@ -1,14 +1,14 @@
 import "./TaskList.css";
 
 import { motion } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
 import { CallSplit, Close, Edit } from "@mui/icons-material";
 import { Card, CardActions, CardContent } from "@mui/material";
 
-import { Task } from "../utils/types";
-import { getColor } from "../utils/utils";
-import CardButton from "./CardButton";
+import { Task } from "../../utils/types";
+import { getColor } from "../../utils/utils";
+import { CardButton } from "../General";
 
 type TaskListProps = {
   tasks?: Task[];

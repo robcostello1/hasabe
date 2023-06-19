@@ -24,8 +24,8 @@ import {
 // @ts-ignore
 import MDEditor from "@uiw/react-md-editor";
 
-import { POINT_SCALE } from "../utils/consts";
-import { EditableTask, UpdateMode } from "../utils/types";
+import { POINT_SCALE } from "../../utils/consts";
+import { EditableTask, UpdateMode } from "../../utils/types";
 
 type FormValues = Pick<EditableTask, "name" | "body"> & {
   worryPoints: "" | number;
@@ -132,8 +132,6 @@ export default function AddTask({
 
   const handleSplit = useCallback(
     (origTask: FormValues, newTask: FormValues) => {
-      console.log("VALUES", origTask, newTask);
-
       if (valuesValidate(origTask) && valuesValidate(newTask)) {
         onSplit(origTask, newTask);
         return;

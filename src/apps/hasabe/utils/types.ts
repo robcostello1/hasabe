@@ -1,3 +1,5 @@
+// Tasks
+
 export type Task = {
   id: string;
   name: string;
@@ -10,3 +12,10 @@ export type Task = {
 export type EditableTask = Omit<Task, "id" | "orderIndex">;
 
 export type UpdateMode = "single" | "split";
+
+// Tags
+
+export type Tag = {
+  id: string;
+  name: string;
+};

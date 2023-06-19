@@ -74,7 +74,7 @@
 @media (min-width: 768px) {
   .ListContainer {
     --padding: 8px;
-    margin: 8px -8px;
+    margin: 16px -8px;
     grid-template-columns: repeat(65, minmax(0, 1fr));
   }
 }
