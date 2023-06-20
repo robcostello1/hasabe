@@ -1,8 +1,4 @@
-import {
-  RxCollection,
-  RxCollectionCreator,
-  TopLevelProperty,
-} from "rxdb/dist/types/types";
+import { RxCollectionCreator, TopLevelProperty } from "rxdb/dist/types/types";
 
 import { Task } from "../types";
 
@@ -28,12 +24,16 @@ const properties: Record<keyof Task, TopLevelProperty> = {
   orderIndex: {
     type: "string",
   },
+  tags: {
+    type: "string",
+    maxLength: 32,
+  },
 };
 
 // Create a collection matching your Supabase table structure.
 const schema = {
   title: "tasks schema",
-  version: 4,
+  version: 5,
   primaryKey: "id",
   type: "object",
   properties,
@@ -65,6 +65,9 @@ export const tasks: RxCollectionCreator = {
     },
     4: function ({ order, ...oldDoc }) {
       return { ...oldDoc, orderIndex: order };
+    },
+    5: function (oldDoc) {
+      return oldDoc;
     },
   },
 };

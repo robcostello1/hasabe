@@ -7,10 +7,25 @@ import db from "../../../utils/db";
 import { useSelect } from "../../../utils/hooks";
 import { EditableTask, Task, UpdateMode } from "../../../utils/types";
 
-export const useTaskMethods = () => {
+type UseTasksMethodsProps = {
+  filters?: {
+    tag?: string;
+  };
+};
+
+export const useTaskMethods = ({ filters }: UseTasksMethodsProps) => {
   const [currentTaskId, setCurrentTaskId] = useState<string | undefined>();
   const tasksTable = useMemo(async () => (await db).tasks, []);
-  const tasks = useSelect<Task>(tasksTable, { sort: [{ orderIndex: "asc" }] });
+
+  const tasks = useSelect<Task>(tasksTable, {
+    sort: [{ orderIndex: "asc" }],
+    // TODO expand this to support multiple tags and other filters
+    selector: filters?.tag
+      ? {
+          tags: { $eq: filters.tag },
+        }
+      : undefined,
+  });
   const [mode, setMode] = useState<UpdateMode>("single");
   const [highestOrderIndex, setHighestOrderIndex] = useState<string | null>(
     null

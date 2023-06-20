@@ -1,0 +1,10 @@
+.TagList {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    margin-top: 16px;
+}
+
+.TagList > *:not(:last-child) {
+    margin-right: 8px;
+}

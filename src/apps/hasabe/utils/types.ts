@@ -7,6 +7,8 @@ export type Task = {
   effortPoints: number;
   worryPoints: number;
   orderIndex: string;
+  // TODO string[]
+  tags?: string;
 };
 
 export type EditableTask = Omit<Task, "id" | "orderIndex">;

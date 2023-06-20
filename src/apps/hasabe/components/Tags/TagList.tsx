@@ -1,23 +1,33 @@
-import { useMemo } from "react";
+import "./TagList.css";
 
 import { Button } from "@mui/material";
 
-import db from "../../utils/db";
-import { useSelect } from "../../utils/hooks";
 import { Tag } from "../../utils/types";
 
-const TagList = () => {
-  const tagsTable = useMemo(async () => (await db).tags, []);
-  const tasks = useSelect<Tag>(tagsTable, { sort: [{ name: "asc" }] });
+type TagListProps = {
+  active: (string | null)[];
+  tags: Tag[];
+  onTagClick: (tag: Tag | null) => void;
+};
 
+const TagList = ({ active, tags, onTagClick }: TagListProps) => {
   return (
-    <div>
-      Tags:
-      {tasks.map((task) => (
-        <Button variant="outlined" key={task.id}>
-          {task.name}
-        </Button>
-      ))}
+    <div className="TagList">
+      <div>Tags:</div>
+
+      {tags.map((tag) => {
+        const isActive = active.find((id) => id === tag.id);
+
+        return (
+          <Button
+            variant={isActive ? "contained" : "outlined"}
+            key={tag.id}
+            onClick={() => onTagClick(!isActive ? tag : null)}
+          >
+            {tag.name}
+          </Button>
+        );
+      })}
     </div>
   );
 };
