@@ -1,8 +1,6 @@
 import Theme from "../../components/Theme";
-import { AuthProvider } from "./components/Auth/AuthContext";
-import AuthWrapper from "./components/Auth/AuthWrapper";
-import Login from "./components/Auth/Login";
-import TaskUi from "./components/TaskUi";
+import { AuthProvider, AuthWrapper, Login } from "./components/Auth";
+import { TaskUi } from "./components/Tasks";
 
 const App = () => {
   return (

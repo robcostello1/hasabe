@@ -8,6 +8,7 @@ import {
   useState,
 } from "react";
 import {
+  AutocompleteElement,
   Controller,
   FormContainer,
   SelectElement,
@@ -24,10 +25,11 @@ import {
 // @ts-ignore
 import MDEditor from "@uiw/react-md-editor";
 
-import { POINT_SCALE } from "../utils/consts";
-import { EditableTask, UpdateMode } from "../utils/types";
+import { POINT_SCALE } from "../../../utils/consts";
+import { EditableTask, Tag, Task, UpdateMode } from "../../../utils/types";
+import TaskTags from "../TaskTags";
 
-type FormValues = Pick<EditableTask, "name" | "body"> & {
+type FormValues = Pick<EditableTask, "name" | "body" | "tags"> & {
   worryPoints: "" | number;
   effortPoints: "" | number;
 };
@@ -42,14 +44,17 @@ const defaultValue: FormValues = {
 type Props = {
   mode: UpdateMode;
   currentTask?: EditableTask;
+  tags?: Tag[];
   onClose: () => void;
   onSubmit: (task: EditableTask) => void;
   onSplit: (origTask: EditableTask, newTask: EditableTask) => void;
 };
 
 const AddTaskForm = ({
+  tags,
   onChange,
 }: {
+  tags?: Tag[];
   onChange?: Dispatch<SetStateAction<FormValues>>;
 }) => {
   const { watch } = useFormContext<EditableTask>();
@@ -57,7 +62,8 @@ const AddTaskForm = ({
 
   useEffect(() => {
     if (onChange) {
-      // TODO - this is a bit hacky, but it works for now
+      // TODO - this is a bit hacky, but it is currently required for the split form.
+      // We will move to a different UI for splitting tasks in the future.
       onChange(JSON.parse(values));
     }
   }, [values, onChange]);
@@ -97,6 +103,8 @@ const AddTaskForm = ({
         options={[...POINT_SCALE, { value: "", label: "" }]}
         fullWidth
       />
+
+      <TaskTags tags={tags || []} />
     </>
   );
 };
@@ -108,6 +116,7 @@ const valuesValidate = (values: FormValues): values is EditableTask =>
 export default function AddTask({
   mode,
   currentTask,
+  tags,
   onClose,
   onSubmit,
   onSplit,
@@ -120,6 +129,7 @@ export default function AddTask({
 
   const handleSubmit = useCallback(
     (values: FormValues) => {
+      console.log("handleSubmit", values);
       if (valuesValidate(values)) {
         onSubmit(values);
         return;
@@ -132,8 +142,6 @@ export default function AddTask({
 
   const handleSplit = useCallback(
     (origTask: FormValues, newTask: FormValues) => {
-      console.log("VALUES", origTask, newTask);
-
       if (valuesValidate(origTask) && valuesValidate(newTask)) {
         onSplit(origTask, newTask);
         return;
@@ -152,7 +160,7 @@ export default function AddTask({
       <DialogTitle>{currentTask ? "Edit" : "Add"} task</DialogTitle>
 
       <DialogContent className="AddTask__form">
-        <AddTaskForm />
+        <AddTaskForm tags={tags} />
       </DialogContent>
 
       <DialogActions>

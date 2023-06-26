@@ -15,7 +15,7 @@ const UserActions = () => {
     setAnchorEl(null);
   };
 
-  const { handleLogout } = useLogout({ onSuccess: console.log });
+  const { handleLogout } = useLogout({});
 
   return (
     <div>

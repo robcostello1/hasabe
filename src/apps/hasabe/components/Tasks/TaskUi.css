@@ -11,3 +11,9 @@
 .Card__active {
   border-color: rgba(255, 255, 255, 0.4);
 }
+
+.TaskUiFilters {
+  display: flex;
+  justify-content: flex-start;
+  align-items: baseline;
+}
