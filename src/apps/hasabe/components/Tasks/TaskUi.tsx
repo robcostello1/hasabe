@@ -3,7 +3,7 @@ import "./TaskUi.css";
 import { useCallback, useMemo, useState } from "react";
 import { useKeyPressEvent, useToggle } from "react-use";
 
-import { Dialog } from "@mui/material";
+import { Dialog, TextField } from "@mui/material";
 
 import { EditableTask, Tag, Task } from "../../utils/types";
 import { TagList } from "../Tags";
@@ -16,7 +16,9 @@ import TaskListActions from "./TaskListActions";
 function TaskUi({ debug }: { debug?: boolean }) {
   const [addModalOpen, setAddModalOpen] = useToggle(false);
   const [tag, setTag] = useState<string | null>(null);
-  const taskFilters = useMemo(() => ({ tag: tag || undefined }), [tag]);
+  const [search, setSearch] = useState<string | null>(null);
+  // TODO causes flashes
+  // const taskFilters = useMemo(() => ({ tag: tag || undefined }), [tag]);
 
   const {
     currentTaskId,
@@ -30,7 +32,7 @@ function TaskUi({ debug }: { debug?: boolean }) {
     handleResetOrder,
     setCurrentTaskId,
     setMode,
-  } = useTaskMethods({ filters: taskFilters });
+  } = useTaskMethods({});
 
   const handleOpenModal = useCallback(() => {
     setCurrentTaskId(undefined);
@@ -95,6 +97,19 @@ function TaskUi({ debug }: { debug?: boolean }) {
 
   const activeTags = useMemo(() => [tag], [tag]);
 
+  const filteredTasks = useMemo(() => {
+    if (!search && !tag) {
+      return tasks;
+    }
+
+    return tasks.filter(({ name, tags: currentTags }) => {
+      const searchMatch =
+        !search || name.toLowerCase().includes(search.toLowerCase());
+      const tagMatch = !tag || currentTags === tag;
+      return searchMatch && tagMatch;
+    });
+  }, [tasks, search, tag]);
+
   return (
     <div className="App">
       <TaskListActions
@@ -104,10 +119,20 @@ function TaskUi({ debug }: { debug?: boolean }) {
         debug={debug}
       />
 
-      <TagList onTagClick={handleTagClick} active={activeTags} tags={tags} />
+      <div className="TaskUiFilters">
+        <TextField
+          // TODO
+          style={{ marginRight: "1rem" }}
+          size="small"
+          label="Search"
+          onChange={(e) => setSearch(e.target.value)}
+        />
+
+        <TagList onTagClick={handleTagClick} active={activeTags} tags={tags} />
+      </div>
 
       <TaskList
-        tasks={tasks}
+        tasks={filteredTasks}
         currentTaskId={currentTaskId}
         onSelectTask={setCurrentTaskId}
         onUnselectTask={() => setCurrentTaskId(undefined)}

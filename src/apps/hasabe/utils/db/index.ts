@@ -51,7 +51,13 @@ const setupDB = async () => {
     pull: {
       realtimePostgresChanges: false,
     }, // If absent, no data is pulled from Supabase
-    push: {}, // If absent, no changes are pushed to Supabase
+    push: {
+      // updateHandler: async (row) => {
+      //   console.log("updateHandler", row);
+      //   // TODO handle failed updates such as schema mismatch
+      //   return true;
+      // },
+    }, // If absent, no changes are pushed to Supabase
   });
 
   new SupabaseReplication({

@@ -23,6 +23,10 @@ export const useSelect = <T extends { id: string }>(
           setEntities(newEntities.map((entity) => entity.toJSON()));
         });
     })();
+
+    return () => {
+      subscription.current?.unsubscribe();
+    };
   }, [queryObjectComp]);
 
   return entities;

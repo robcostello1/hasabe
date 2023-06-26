@@ -26,9 +26,10 @@ import {
 import MDEditor from "@uiw/react-md-editor";
 
 import { POINT_SCALE } from "../../../utils/consts";
-import { EditableTask, Tag, UpdateMode } from "../../../utils/types";
+import { EditableTask, Tag, Task, UpdateMode } from "../../../utils/types";
+import TaskTags from "../TaskTags";
 
-type FormValues = Pick<EditableTask, "name" | "body"> & {
+type FormValues = Pick<EditableTask, "name" | "body" | "tags"> & {
   worryPoints: "" | number;
   effortPoints: "" | number;
 };
@@ -103,12 +104,7 @@ const AddTaskForm = ({
         fullWidth
       />
 
-      <AutocompleteElement
-        name="tags"
-        label="Tags"
-        options={tags || []}
-        autocompleteProps={{ freeSolo: true }}
-      />
+      <TaskTags tags={tags || []} />
     </>
   );
 };
