@@ -1,8 +1,4 @@
-import {
-  AutocompleteElement,
-  Controller,
-  useFormContext,
-} from "react-hook-form-mui";
+import { Controller, useFormContext } from "react-hook-form-mui";
 
 import { Autocomplete, TextField } from "@mui/material";
 

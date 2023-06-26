@@ -27,7 +27,7 @@ export const useSelect = <T extends { id: string }>(
     return () => {
       subscription.current?.unsubscribe();
     };
-  }, [queryObjectComp]);
+  }, [queryObjectComp, table]);
 
   return entities;
 };

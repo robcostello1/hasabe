@@ -8,7 +8,6 @@ import {
   useState,
 } from "react";
 import {
-  AutocompleteElement,
   Controller,
   FormContainer,
   SelectElement,
@@ -26,7 +25,7 @@ import {
 import MDEditor from "@uiw/react-md-editor";
 
 import { POINT_SCALE } from "../../../utils/consts";
-import { EditableTask, Tag, Task, UpdateMode } from "../../../utils/types";
+import { EditableTask, Tag, UpdateMode } from "../../../utils/types";
 import TaskTags from "../TaskTags";
 
 type FormValues = Pick<EditableTask, "name" | "body" | "tags"> & {

@@ -39,7 +39,7 @@ export const useTaskMethods = ({ filters }: UseTasksMethodsProps) => {
         .exec();
       setHighestOrderIndex(highestItem?.orderIndex);
     })();
-  }, [tasks]);
+  }, [tasks, tasksTable]);
 
   const handleResetOrder = useCallback(async () => {
     let orderIndex: string | null = null;
@@ -55,7 +55,7 @@ export const useTaskMethods = ({ filters }: UseTasksMethodsProps) => {
 
       taskToEdit.patch({ orderIndex });
     });
-  }, [tasks]);
+  }, [tasks, tasksTable]);
 
   const handleAddTask = useCallback(
     async (task: EditableTask) => {
@@ -70,7 +70,7 @@ export const useTaskMethods = ({ filters }: UseTasksMethodsProps) => {
       };
       (await tasksTable).insert(newTask);
     },
-    [highestOrderIndex]
+    [highestOrderIndex, tasksTable]
   );
 
   const handleEditTask = useCallback(
@@ -81,14 +81,19 @@ export const useTaskMethods = ({ filters }: UseTasksMethodsProps) => {
 
       oldTask.patch(task);
     },
-    []
+    [tasksTable]
   );
 
-  const handleRemoveTask = useCallback(async (id: string) => {
-    const task = await (await tasksTable).findOne({ selector: { id } }).exec();
+  const handleRemoveTask = useCallback(
+    async (id: string) => {
+      const task = await (await tasksTable)
+        .findOne({ selector: { id } })
+        .exec();
 
-    task.remove();
-  }, []);
+      task.remove();
+    },
+    [tasksTable]
+  );
 
   const handleSplitTasks = useCallback(
     async (origTask: Task, newTask: EditableTask) => {
@@ -97,7 +102,7 @@ export const useTaskMethods = ({ filters }: UseTasksMethodsProps) => {
 
       handleEditTask(origTask);
     },
-    [handleEditTask]
+    [handleEditTask, tasksTable]
   );
 
   const handleMoveTask = useCallback(
