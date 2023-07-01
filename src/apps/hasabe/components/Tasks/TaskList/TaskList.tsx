@@ -1,10 +1,9 @@
-import "./TaskList.css";
+import './TaskList.css';
 
-import { useViewportScroll } from "framer-motion";
-import { useRef } from "react";
+import { useRef } from 'react';
 
-import { Task } from "../../../utils/types";
-import TaskListItem from "../TaskListItem/TaskListItem";
+import { Task } from '../../../utils/types';
+import TaskListItem from '../TaskListItem/TaskListItem';
 
 type TaskListProps = {
   tasks?: Task[];
