@@ -1,5 +1,5 @@
 import Color from "colorjs.io";
-import { filter, findIndex, max } from "lodash";
+import { filter } from "lodash";
 
 import { POINT_SCALE } from "./consts";
 import { Task } from "./types";

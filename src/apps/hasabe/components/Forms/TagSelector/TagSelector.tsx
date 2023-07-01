@@ -2,13 +2,13 @@ import { Controller, useFormContext } from "react-hook-form-mui";
 
 import { Autocomplete, TextField } from "@mui/material";
 
-import { Tag } from "../../utils/types";
+import { Tag } from "../../../utils/types";
 
-type TaskTagsProps = {
+type TagSelectorProps = {
   tags: Tag[];
 };
 
-const TaskTags = ({ tags }: TaskTagsProps) => {
+const TagSelector = ({ tags }: TagSelectorProps) => {
   const { control } = useFormContext();
 
   return (
@@ -17,16 +17,17 @@ const TaskTags = ({ tags }: TaskTagsProps) => {
       name="tags"
       render={({ field: { onChange, value } }) => {
         return (
-          <Autocomplete<string>
+          <Autocomplete
             value={value}
             onChange={(_, value) => onChange(value)}
             options={tags.map(({ id }) => id) || []}
             getOptionLabel={(optionId) =>
               tags.find(({ id }) => id === optionId)?.name || ""
             }
-            onInputChange={(_, value) => {
-              console.log("new tag", value);
-            }}
+            // TODO: add new tags
+            // onInputChange={(_, value) => {
+            //   console.log("new tag", value);
+            // }}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -44,4 +45,4 @@ const TaskTags = ({ tags }: TaskTagsProps) => {
   );
 };
 
-export default TaskTags;
+export default TagSelector;

@@ -5,13 +5,13 @@ import { useKeyPressEvent, useToggle } from "react-use";
 
 import { Dialog, TextField } from "@mui/material";
 
-import { EditableTask, Tag, Task } from "../../utils/types";
-import { TagList } from "../Tags";
-import { useTagMethods } from "../Tags/hooks";
-import AddTask from "./AddTask";
-import { useTaskMethods } from "./hooks";
-import TaskList from "./TaskList";
-import TaskListActions from "./TaskListActions";
+import { EditableTask, Tag, Task } from "../../../utils/types";
+import { TagList } from "../../Tags";
+import { useTagMethods } from "../../Tags/hooks";
+import AddTask from "../AddTask";
+import { useTaskMethods } from "../hooks";
+import TaskList from "../TaskList";
+import TaskListActions from "../TaskListActions";
 
 function TaskUi({ debug }: { debug?: boolean }) {
   const [addModalOpen, setAddModalOpen] = useToggle(false);

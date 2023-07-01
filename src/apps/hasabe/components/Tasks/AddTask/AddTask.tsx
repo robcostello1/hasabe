@@ -26,7 +26,7 @@ import MDEditor from "@uiw/react-md-editor";
 
 import { POINT_SCALE } from "../../../utils/consts";
 import { EditableTask, Tag, UpdateMode } from "../../../utils/types";
-import TaskTags from "../TaskTags";
+import { TagSelector } from "../../Forms";
 
 type FormValues = Pick<EditableTask, "name" | "body" | "tags"> & {
   worryPoints: "" | number;
@@ -103,7 +103,7 @@ const AddTaskForm = ({
         fullWidth
       />
 
-      <TaskTags tags={tags || []} />
+      <TagSelector tags={tags || []} />
     </>
   );
 };
@@ -176,13 +176,13 @@ export default function AddTask({
       <DialogContent className="AddTask__split">
         <div className="AddTask__form">
           <FormContainer defaultValues={currentTask}>
-            <AddTaskForm onChange={setSplitOrig} />
+            <AddTaskForm onChange={setSplitOrig} tags={tags} />
           </FormContainer>
         </div>
 
         <div className="AddTask__form">
           <FormContainer defaultValues={defaultValue}>
-            <AddTaskForm onChange={setSplitNew} />
+            <AddTaskForm onChange={setSplitNew} tags={tags} />
           </FormContainer>
         </div>
       </DialogContent>
