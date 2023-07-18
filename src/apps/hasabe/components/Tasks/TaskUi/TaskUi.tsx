@@ -1,17 +1,17 @@
-import "./TaskUi.css";
+import './TaskUi.css';
 
-import { useCallback, useMemo, useState } from "react";
-import { useKeyPressEvent, useToggle } from "react-use";
+import { useCallback, useMemo, useState } from 'react';
+import { useKeyPressEvent, useToggle } from 'react-use';
 
-import { Dialog, TextField } from "@mui/material";
+import { Dialog, MenuItem, TextField } from '@mui/material';
 
-import { EditableTask, Tag, Task } from "../../../utils/types";
-import { TagList } from "../../Tags";
-import { useTagMethods } from "../../Tags/hooks";
-import AddTask from "../AddTask";
-import { useTaskMethods } from "../hooks";
-import TaskList from "../TaskList";
-import TaskListActions from "../TaskListActions";
+import { EditableTask, Tag, Task } from '../../../utils/types';
+import { TagList } from '../../Tags';
+import { useTagMethods } from '../../Tags/hooks';
+import AddTask from '../AddTask';
+import { useTaskMethods } from '../hooks';
+import TaskList from '../TaskList';
+import TaskListActions from '../TaskListActions';
 
 function TaskUi({ debug }: { debug?: boolean }) {
   const [addModalOpen, setAddModalOpen] = useToggle(false);
@@ -29,6 +29,8 @@ function TaskUi({ debug }: { debug?: boolean }) {
     handleEditTask,
     handleSplitTasks,
     handleMoveTask,
+    handleMoveTaskToTop,
+    handleMoveTaskToBottom,
     handleResetOrder,
     setCurrentTaskId,
     setMode,
@@ -146,6 +148,26 @@ function TaskUi({ debug }: { debug?: boolean }) {
           setAddModalOpen(id);
         }}
         onClickCloseTask={(id) => handleRemoveTask(id)}
+        renderContextMenu={(id, handleClose) => [
+          <MenuItem
+            key="move-top"
+            onClick={() => {
+              handleMoveTaskToTop(id);
+              handleClose();
+            }}
+          >
+            Move to top
+          </MenuItem>,
+          <MenuItem
+            key="move-bottom"
+            onClick={() => {
+              handleMoveTaskToBottom(id);
+              handleClose();
+            }}
+          >
+            Move to bottom
+          </MenuItem>,
+        ]}
       />
 
       <Dialog

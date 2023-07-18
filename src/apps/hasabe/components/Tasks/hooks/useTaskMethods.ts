@@ -1,11 +1,11 @@
-import { generateKeyBetween } from "fractional-indexing";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { generateKeyBetween } from 'fractional-indexing';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 // @ts-ignore
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4 } from 'uuid';
 
-import db from "../../../utils/db";
-import { useSelect } from "../../../utils/hooks";
-import { EditableTask, Task, UpdateMode } from "../../../utils/types";
+import db from '../../../utils/db';
+import { useSelect } from '../../../utils/hooks';
+import { EditableTask, Task, UpdateMode } from '../../../utils/types';
 
 type UseTasksMethodsProps = {
   filters?: {
@@ -105,8 +105,29 @@ export const useTaskMethods = ({ filters }: UseTasksMethodsProps) => {
     [handleEditTask, tasksTable]
   );
 
+  const handleMoveTaskToTop = useCallback(
+    (id: string) => {
+      const orderIndex = generateKeyBetween(null, tasks[0].orderIndex);
+
+      handleEditTask({ id, orderIndex });
+    },
+    [tasks, handleEditTask]
+  );
+
+  const handleMoveTaskToBottom = useCallback(
+    (id: string) => {
+      const orderIndex = generateKeyBetween(
+        null,
+        tasks[tasks.length - 1].orderIndex
+      );
+
+      handleEditTask({ id, orderIndex });
+    },
+    [tasks, handleEditTask]
+  );
+
   const handleMoveTask = useCallback(
-    async (id: string, offset: number) => {
+    (id: string, offset: number) => {
       const currentIndex = tasks.indexOf(tasks.find((task) => task.id === id)!);
       if (
         currentIndex + offset < 0 ||
@@ -136,6 +157,8 @@ export const useTaskMethods = ({ filters }: UseTasksMethodsProps) => {
     handleEditTask,
     handleSplitTasks,
     handleMoveTask,
+    handleMoveTaskToTop,
+    handleMoveTaskToBottom,
     handleAddTask,
     setCurrentTaskId,
     handleResetOrder,

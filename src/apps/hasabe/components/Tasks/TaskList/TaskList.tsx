@@ -1,6 +1,6 @@
 import './TaskList.css';
 
-import { useRef } from 'react';
+import { ReactNode, useRef } from 'react';
 
 import { Task } from '../../../utils/types';
 import TaskListItem from '../TaskListItem/TaskListItem';
@@ -8,6 +8,7 @@ import TaskListItem from '../TaskListItem/TaskListItem';
 type TaskListProps = {
   tasks?: Task[];
   currentTaskId?: string;
+  renderContextMenu?: (id: string, handleClose: () => void) => ReactNode;
   onSelectTask: (id: string) => void;
   onUnselectTask: () => void;
   onClickEditTask: (id: string) => void;
@@ -23,6 +24,7 @@ const TaskList = ({
   onClickEditTask,
   onClickSplitTask,
   onClickCloseTask,
+  renderContextMenu,
 }: TaskListProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -40,6 +42,7 @@ const TaskList = ({
           key={task.id}
           active={currentTaskId === task.id}
           task={task}
+          renderContextMenu={renderContextMenu}
           onSelect={onSelectTask}
           onClickEdit={onClickEditTask}
           onClickSplit={onClickSplitTask}
