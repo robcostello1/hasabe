@@ -37,7 +37,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "build": "tsc && vite build",
+    "build": "vite build",
     "dev": "vite serve",
     "preview": "vite preview",
     "test": "vite test --transformIgnorePatterns \"node_modules/(?!react-markdown)/\""
