@@ -1,5 +1,9 @@
 import { addRxPlugin, createRxDatabase } from "rxdb";
-import { SupabaseReplication } from "rxdb-supabase";
+import {
+  SupabaseReplication,
+  SupabaseReplicationCheckpoint,
+  SupabaseReplicationOptions,
+} from "rxdb-supabase";
 import { RxDBDevModePlugin } from "rxdb/plugins/dev-mode";
 import { RxDBMigrationPlugin } from "rxdb/plugins/migration";
 import { getRxStorageDexie } from "rxdb/plugins/storage-dexie";
@@ -29,14 +33,36 @@ const setupDB = async () => {
     storage: getRxStorageDexie(), // Uses IndexedDB
   });
 
-  const collections = db.addCollections({
+  const collections = await db.addCollections({
     tags,
     tasks,
   });
 
-  new SupabaseReplication({
+  const initialCheckpoint: SupabaseReplicationCheckpoint = {
+    modified: new Date(0).toISOString(),
+    primaryKeyValue: "id",
+  };
+
+  const defaultReplicationOptions: Omit<
+    SupabaseReplicationOptions<{}>,
+    "collection" | "replicationIdentifier"
+  > = {
     supabaseClient,
-    collection: (await collections).tasks,
+    pull: {
+      realtimePostgresChanges: true,
+      initialCheckpoint,
+    }, // If absent, no data is pulled from Supabase
+    push: {
+      // updateHandler: async (row) => {
+      //   console.log("updateHandler", row);
+      //   // TODO handle failed updates such as schema mismatch
+      //   return true;
+      // },
+    }, // If absent, no changes are pushed to Supabase
+  };
+
+  new SupabaseReplication({
+    collection: collections.tasks,
     //   /**
     //    * An ID for the replication, so that RxDB is able to resume the replication
     //    * on app reload. It is recommended to add the supabase URL to make sure you're
@@ -48,26 +74,13 @@ const setupDB = async () => {
     //    * RxDB per user ID (you could add the user ID to the RxDB name).
     //    */
     replicationIdentifier: "tasks" + process.env.REACT_APP_SUPABASE_URL, // TODO: Add Supabase user ID?
-    pull: {
-      realtimePostgresChanges: false,
-    }, // If absent, no data is pulled from Supabase
-    push: {
-      // updateHandler: async (row) => {
-      //   console.log("updateHandler", row);
-      //   // TODO handle failed updates such as schema mismatch
-      //   return true;
-      // },
-    }, // If absent, no changes are pushed to Supabase
+    ...defaultReplicationOptions,
   });
 
   new SupabaseReplication({
-    supabaseClient,
-    collection: (await collections).tags,
+    collection: collections.tags,
     replicationIdentifier: "tags" + process.env.REACT_APP_SUPABASE_URL, // TODO: Add Supabase user ID?
-    pull: {
-      realtimePostgresChanges: false,
-    },
-    push: {},
+    ...defaultReplicationOptions,
   });
 
   return collections;
