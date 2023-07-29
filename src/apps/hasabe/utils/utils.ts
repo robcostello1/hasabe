@@ -1,8 +1,8 @@
-import Color from "colorjs.io";
-import { filter } from "lodash";
+import Color from 'colorjs.io';
+import filter from 'lodash/filter';
 
-import { POINT_SCALE } from "./consts";
-import { Task } from "./types";
+import { POINT_SCALE } from './consts';
+import { Task } from './types';
 
 export const removeTask = (id: string, tasks?: Task[]): Task[] =>
   tasks ? filter(tasks, ({ id: currentId }) => currentId !== id) : [];
