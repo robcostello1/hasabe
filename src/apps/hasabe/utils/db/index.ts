@@ -14,13 +14,13 @@ import { tags } from "./tags";
 import { tasks } from "./tasks";
 
 addRxPlugin(RxDBMigrationPlugin);
-if (process.env.NODE_ENV === "development") {
+if (import.meta.env.MODE === "development") {
   addRxPlugin(RxDBDevModePlugin);
 }
 
 export const supabaseClient = createClient(
-  process.env.REACT_APP_SUPABASE_URL!,
-  process.env.REACT_APP_SUPABASE_KEY!
+  import.meta.env.VITE_SUPABASE_URL!,
+  import.meta.env.VITE_SUPABASE_KEY!
 );
 
 export type DbTables = "tasks" | "tags";
@@ -73,13 +73,13 @@ const setupDB = async () => {
     //    * might want to re-create the entire RxDB from scratch in that case or have one
     //    * RxDB per user ID (you could add the user ID to the RxDB name).
     //    */
-    replicationIdentifier: "tasks" + process.env.REACT_APP_SUPABASE_URL, // TODO: Add Supabase user ID?
+    replicationIdentifier: "tasks" + import.meta.env.REACT_APP_SUPABASE_URL, // TODO: Add Supabase user ID?
     ...defaultReplicationOptions,
   });
 
   new SupabaseReplication({
     collection: collections.tags,
-    replicationIdentifier: "tags" + process.env.REACT_APP_SUPABASE_URL, // TODO: Add Supabase user ID?
+    replicationIdentifier: "tags" + import.meta.env.REACT_APP_SUPABASE_URL, // TODO: Add Supabase user ID?
     ...defaultReplicationOptions,
   });
 

@@ -1,32 +1,18 @@
-import "./AddTask.css";
+import './AddTask.css';
 
+import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
 import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
-import {
-  Controller,
-  FormContainer,
-  SelectElement,
-  TextFieldElement,
-  useFormContext,
-} from "react-hook-form-mui";
+    Controller, FormContainer, SelectElement, TextFieldElement, useFormContext
+} from 'react-hook-form-mui';
 
-import {
-  Button,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-} from "@mui/material";
+import { Button, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+// TODO introduce large dependencies (e.g. refractor)
 // @ts-ignore
-import MDEditor from "@uiw/react-md-editor";
+import MDEditor from '@uiw/react-md-editor';
 
-import { POINT_SCALE } from "../../../utils/consts";
-import { EditableTask, Tag, UpdateMode } from "../../../utils/types";
-import { TagSelector } from "../../Forms";
+import { POINT_SCALE } from '../../../utils/consts';
+import { EditableTask, Tag, UpdateMode } from '../../../utils/types';
+import { TagSelector } from '../../Forms';
 
 type FormValues = Pick<EditableTask, "name" | "body" | "tags"> & {
   worryPoints: "" | number;

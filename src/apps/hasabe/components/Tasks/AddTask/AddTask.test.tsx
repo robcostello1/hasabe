@@ -1,7 +1,9 @@
-import { render, screen, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import React from 'react';
 
-import AddTask from "./AddTask";
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+
+import AddTask from './AddTask';
 
 describe("AddTask", () => {
   it("handles adding a task", async () => {

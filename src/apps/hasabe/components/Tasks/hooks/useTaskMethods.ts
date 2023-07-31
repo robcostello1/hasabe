@@ -1,11 +1,11 @@
-import { generateKeyBetween } from 'fractional-indexing';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { generateKeyBetween } from "fractional-indexing";
+import { useCallback, useEffect, useMemo, useState } from "react";
 // @ts-ignore
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
-import db from '../../../utils/db';
-import { useSelect } from '../../../utils/hooks';
-import { EditableTask, Task, UpdateMode } from '../../../utils/types';
+import db from "../../../utils/db";
+import { useSelect } from "../../../utils/hooks";
+import { EditableTask, Task, UpdateMode } from "../../../utils/types";
 
 type UseTasksMethodsProps = {
   filters?: {
