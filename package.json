@@ -37,7 +37,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "build": "vite build",
+    "build": "CI=false vite build -d",
     "dev": "vite serve",
     "preview": "vite preview",
     "visualize": "vite-bundle-visualizer",
