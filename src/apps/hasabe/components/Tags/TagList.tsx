@@ -23,7 +23,7 @@ const TagList = ({
 
         return (
           <Button
-            sx={{ m: 0.5 }}
+            sx={{ mr: 1, mb: 1 }}
             disabled={disabled}
             variant={isActive ? "contained" : "outlined"}
             key={tag.id}

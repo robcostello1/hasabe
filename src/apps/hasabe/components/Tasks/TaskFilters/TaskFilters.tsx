@@ -33,10 +33,11 @@ const TaskFilters = ({
   return (
     <div className="TaskFilters">
       <TextField
-        sx={{ m: 0.5, ml: 0 }}
+        sx={{ mr: 1, mb: 1 }}
         size="small"
         label="Search"
         onChange={(e) => setSearch(e.target.value)}
+        InputProps={{ sx: { m: 0 } }}
       />
 
       <TagList

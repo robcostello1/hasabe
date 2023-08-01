@@ -1,5 +1,13 @@
+
 .TaskFilters {
-    display: flex;
-    justify-content: flex-start;
-    align-items: baseline;
+    margin-top: 0.5rem;
+}
+
+/* Media query at tablet portrait */
+@media (min-width: 768px) {
+    .TaskFilters {
+        display: flex;
+        justify-content: flex-start;
+        align-items: baseline;
+    }
 }

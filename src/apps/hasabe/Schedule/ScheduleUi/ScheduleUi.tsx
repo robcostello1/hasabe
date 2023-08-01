@@ -54,14 +54,15 @@ const ScheduleUi = ({ availableTags, onChange }: ScheduleUiProps) => {
   return (
     <div>
       <Button
-        sx={{ m: 0.5 }}
+        sx={{ mr: 1, mb: 1 }}
         variant={isEnabled ? "contained" : "outlined"}
         startIcon={<CalendarViewDay />}
         onClick={() => setIsEnabled(!isEnabled)}
       >
         Use schedule
       </Button>
-      <IconButton onClick={() => setCalendarShown(true)}>
+
+      <IconButton sx={{ mr: 1, mb: 1 }} onClick={() => setCalendarShown(true)}>
         <SettingsIcon />
       </IconButton>
 
