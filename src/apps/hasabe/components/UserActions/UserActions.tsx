@@ -5,7 +5,7 @@ import { IconButton, Menu, MenuItem } from "@mui/material";
 
 import { useLogout } from "../Auth/hooks";
 
-const UserActions = () => {
+const UserActions = (_: {}) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {

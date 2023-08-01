@@ -1,4 +1,4 @@
-import { CalendarState, Days, Periods } from "./types";
+import { CalendarChangePayload, CalendarState } from "./types";
 
 export const DEFAULT_CALENDAR_STATE: CalendarState = {
   mon: {
@@ -47,11 +47,7 @@ export const DEFAULT_CALENDAR_STATE: CalendarState = {
 
 export const calendarReducer = (
   state: CalendarState,
-  payload: {
-    day: keyof typeof Days;
-    period: keyof typeof Periods;
-    tag: string | null;
-  }
+  payload: CalendarChangePayload
 ) => {
   return {
     ...state,

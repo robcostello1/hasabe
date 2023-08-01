@@ -1,24 +1,24 @@
 import { Meta, StoryFn } from "@storybook/react";
 
-import Calendar from "./Calendar";
+import ScheduleUi from "./ScheduleUi";
 
 export default {
-  title: "Calendar",
-  component: Calendar,
+  title: "ScheduleUi",
+  component: ScheduleUi,
   parameters: {
     // More on Story layout: https://storybook.js.org/docs/react/configure/story-layout
     layout: "fullscreen",
   },
-} as Meta<typeof Calendar>;
+} as Meta<typeof ScheduleUi>;
 
-const Template: StoryFn<typeof Calendar> = (args) => {
-  return <Calendar {...args} />;
+const Template: StoryFn<typeof ScheduleUi> = (args) => {
+  return <ScheduleUi {...args} />;
 };
 
 export const Default = Template.bind({});
 
 Default.args = {
-  avaiableTags: [
+  availableTags: [
     {
       id: "1",
       name: "Tag 1",

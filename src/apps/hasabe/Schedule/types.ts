@@ -8,6 +8,8 @@ export enum Days {
   sun = "Sun",
 }
 
+export type Day = keyof typeof Days;
+
 export enum Periods {
   morning = "Morning",
   lunchtime = "Lunchtime",
@@ -15,8 +17,16 @@ export enum Periods {
   evening = "Evening",
 }
 
+export type Period = keyof typeof Periods;
+
 export type CalendarState = {
-  [key in keyof typeof Days]: {
-    [key in keyof typeof Periods]: string | null;
+  [key in Day]: {
+    [key in Period]: string | null;
   };
+};
+
+export type CalendarChangePayload = {
+  day: Day;
+  period: Period;
+  tag: string | null;
 };

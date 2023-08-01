@@ -5,11 +5,20 @@ import { Tag } from "../../../utils/types";
 type TagSelectorFieldProps = {
   tags: Tag[];
   value: string | null;
+  size?: "small" | "medium";
+  label?: string;
   onChange: (value: string | null) => void;
   TextFieldProps?: { variant: TextFieldProps["variant"] };
 };
 
-const TagSelectorField = ({ tags, value, onChange }: TagSelectorFieldProps) => (
+const TagSelectorField = ({
+  tags,
+  value,
+  TextFieldProps,
+  size,
+  label = "Tags",
+  onChange,
+}: TagSelectorFieldProps) => (
   <Autocomplete
     value={value}
     onChange={(_, value) => onChange(value)}
@@ -17,6 +26,8 @@ const TagSelectorField = ({ tags, value, onChange }: TagSelectorFieldProps) => (
     getOptionLabel={(optionId) =>
       tags.find(({ id }) => id === optionId)?.name || ""
     }
+    clearIcon={null}
+    size={size}
     // TODO: add new tags
     // onInputChange={(_, value) => {
     //   console.log("new tag", value);
@@ -24,11 +35,12 @@ const TagSelectorField = ({ tags, value, onChange }: TagSelectorFieldProps) => (
     renderInput={(params) => (
       <TextField
         {...params}
-        label="Tags"
+        label={label}
         InputProps={{
           ...params.InputProps,
           type: "search",
         }}
+        {...TextFieldProps}
       />
     )}
   />
