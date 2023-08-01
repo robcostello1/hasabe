@@ -1,17 +1,17 @@
-import './TaskUi.css';
+import "./TaskUi.css";
 
-import { useCallback, useMemo, useState } from 'react';
-import { useKeyPressEvent, useToggle } from 'react-use';
+import { useCallback, useMemo, useState } from "react";
+import { useKeyPressEvent, useToggle } from "react-use";
 
-import { Dialog, MenuItem, TextField } from '@mui/material';
+import { Dialog, MenuItem } from "@mui/material";
 
-import { EditableTask, Tag, Task } from '../../../utils/types';
-import { TagList } from '../../Tags';
-import { useTagMethods } from '../../Tags/hooks';
-import AddTask from '../AddTask';
-import { useTaskMethods } from '../hooks';
-import TaskList from '../TaskList';
-import TaskListActions from '../TaskListActions';
+import { EditableTask, Tag, Task } from "../../../utils/types";
+import { useTagMethods } from "../../Tags/hooks";
+import AddTask from "../AddTask";
+import { useTaskMethods } from "../hooks";
+import TaskFilters from "../TaskFilters/TaskFilters";
+import TaskList from "../TaskList";
+import TaskListActions from "../TaskListActions";
 
 function TaskUi({ debug }: { debug?: boolean }) {
   const [addModalOpen, setAddModalOpen] = useToggle(false);
@@ -86,7 +86,7 @@ function TaskUi({ debug }: { debug?: boolean }) {
     }
   });
 
-  const handleTagClick = useCallback((tag: Tag | null) => {
+  const handleTagChange = useCallback((tag: Tag | null) => {
     setTag(tag?.id || null);
   }, []);
 
@@ -121,17 +121,12 @@ function TaskUi({ debug }: { debug?: boolean }) {
         debug={debug}
       />
 
-      <div className="TaskUiFilters">
-        <TextField
-          // TODO
-          style={{ marginRight: "1rem" }}
-          size="small"
-          label="Search"
-          onChange={(e) => setSearch(e.target.value)}
-        />
-
-        <TagList onTagClick={handleTagClick} active={activeTags} tags={tags} />
-      </div>
+      <TaskFilters
+        availableTags={tags}
+        activeTags={activeTags}
+        setSearch={setSearch}
+        onTagChange={handleTagChange}
+      />
 
       <TaskList
         tasks={filteredTasks}
