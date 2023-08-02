@@ -1,8 +1,8 @@
-import { Button } from '@mui/material';
+import { Button } from "@mui/material";
 
-import { EditableTask } from '../../../utils/types';
-import UtilityBar from '../../General/UtilityBar/UtilityBar';
-import UserActions from '../../UserActions/UserActions';
+import { EditableTask } from "../../../utils/types";
+import UtilityBar from "../../General/UtilityBar/UtilityBar";
+import UserActions from "../../UserActions/UserActions";
 
 type TaskListActionsProps = {
   handleOpenModal: () => void;
@@ -15,7 +15,7 @@ const TaskListActions = ({
   handleOpenModal,
   handleResetOrder,
   handleAddTask,
-  debug,
+  debug = !!window.location.search.match(/debug=true/),
 }: TaskListActionsProps) => (
   <UtilityBar
     left={

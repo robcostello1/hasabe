@@ -1,6 +1,9 @@
 .AddTask__form {
   width: 80vw;
   max-width: 500px;
+  padding-top: 0.5rem !important;
+  margin-top: -0.5rem;
+  padding-bottom: 0 !important;
 }
 
 .AddTask__split {

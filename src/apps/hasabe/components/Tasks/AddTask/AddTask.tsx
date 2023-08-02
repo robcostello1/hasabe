@@ -1,18 +1,34 @@
-import './AddTask.css';
+import "./AddTask.css";
 
-import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
 import {
-    Controller, FormContainer, SelectElement, TextFieldElement, useFormContext
-} from 'react-hook-form-mui';
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
+import {
+  Controller,
+  FormContainer,
+  SelectElement,
+  TextFieldElement,
+  useFormContext,
+} from "react-hook-form-mui";
 
-import { Button, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import {
+  Box,
+  Button,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from "@mui/material";
 // TODO introduce large dependencies (e.g. refractor)
 // @ts-ignore
-import MDEditor from '@uiw/react-md-editor';
+import MDEditor from "@uiw/react-md-editor";
 
-import { POINT_SCALE } from '../../../utils/consts';
-import { EditableTask, Tag, UpdateMode } from '../../../utils/types';
-import { TagSelector } from '../../Forms';
+import { POINT_SCALE } from "../../../utils/consts";
+import { EditableTask, Tag, UpdateMode } from "../../../utils/types";
+import { TagSelector } from "../../Forms";
 
 type FormValues = Pick<EditableTask, "name" | "body" | "tags"> & {
   worryPoints: "" | number;
@@ -57,7 +73,7 @@ const AddTaskForm = ({
     <>
       <TextFieldElement name="name" label="Name" required fullWidth />
 
-      <div style={{ marginBottom: 32 }}>
+      <Box sx={{ mb: 4 }}>
         <Controller
           name="body"
           render={({ field: { onChange, value } }) => (
@@ -73,7 +89,7 @@ const AddTaskForm = ({
             />
           )}
         />
-      </div>
+      </Box>
 
       <SelectElement
         name="effortPoints"
