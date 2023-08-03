@@ -1,5 +1,5 @@
-import { enumKeys } from "../utils/types";
-import { Day, Days, Period } from "./types";
+import { enumKeys } from '../utils/types';
+import { Day, Days, Period } from './types';
 
 const periodDefinition: Record<Period, number> = {
   evening: Date.parse("01 Jan 1970 18:0:00 GMT"),
@@ -14,7 +14,7 @@ export const getCurrentPeriod = (
   timestamp: number
 ): { day: Day; period: Period } => {
   return {
-    day: enumKeys(Days)[new Date(timestamp).getDay()],
+    day: enumKeys(Days)[new Date(timestamp).getDay() - 1],
     period:
       (Object.entries(periodDefinition) as [Period, number][]).find(
         ([_, startTime]) => timestamp % DAY_LENGTH >= startTime

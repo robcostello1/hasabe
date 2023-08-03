@@ -1,11 +1,11 @@
-import { generateKeyBetween } from "fractional-indexing";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { generateKeyBetween } from 'fractional-indexing';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 // @ts-ignore
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4 } from 'uuid';
 
-import db from "../../../utils/db";
-import { useSelect } from "../../../utils/hooks";
-import { EditableTask, Task, UpdateMode } from "../../../utils/types";
+import db from '../../../utils/db';
+import { useSelect } from '../../../utils/hooks';
+import { EditableTask, Task, UpdateMode } from '../../../utils/types';
 
 type UseTasksMethodsProps = {
   filters?: {
@@ -30,6 +30,7 @@ export const useTaskMethods = ({ filters }: UseTasksMethodsProps) => {
   const [highestOrderIndex, setHighestOrderIndex] = useState<string | null>(
     null
   );
+  const [lowestOrderIndex, setLowestOrderIndex] = useState<string | null>(null);
 
   // Get highest order index on mount
   useEffect(() => {
@@ -38,6 +39,11 @@ export const useTaskMethods = ({ filters }: UseTasksMethodsProps) => {
         .findOne({ sort: [{ orderIndex: "desc" }] })
         .exec();
       setHighestOrderIndex(highestItem?.orderIndex);
+
+      const lowestItem = await (await tasksTable)
+        .findOne({ sort: [{ orderIndex: "asc" }] })
+        .exec();
+      setLowestOrderIndex(lowestItem?.orderIndex);
     })();
   }, [tasks, tasksTable]);
 
@@ -107,11 +113,11 @@ export const useTaskMethods = ({ filters }: UseTasksMethodsProps) => {
 
   const handleMoveTaskToTop = useCallback(
     (id: string) => {
-      const orderIndex = generateKeyBetween(null, tasks[0].orderIndex);
+      const orderIndex = generateKeyBetween(null, lowestOrderIndex);
 
       handleEditTask({ id, orderIndex });
     },
-    [tasks, handleEditTask]
+    [lowestOrderIndex, handleEditTask]
   );
 
   const handleMoveTaskToBottom = useCallback(
