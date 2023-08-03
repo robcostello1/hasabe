@@ -1,7 +1,7 @@
 .ListItem {
   padding: var(--padding);
   grid-column: span 8;
-
+  grid-row: span 8;
   aspect-ratio: 1;
   overflow: hidden;
 }
@@ -14,39 +14,48 @@
 
 .ListItem__2 {
   grid-column: span 11;
+  grid-row: span 11;
 }
 
 .ListItem__3 {
   grid-column: span 14;
+  grid-row: span 14;
 }
 
 .ListItem__5 {
   grid-column: span 18;
+  grid-row: span 18;
 }
 
 .ListItem__8 {
   grid-column: span 23;
+  grid-row: span 23;
 }
 
 .ListItem__13 {
   grid-column: span 29;
+  grid-row: span 29;
 }
 
 .ListItem__21 {
   grid-column: span 37;
+  grid-row: span 37;
 }
 
 @media (max-width: 599.9px) {
   .ListItem__1 {
     grid-column: span 11;
+    grid-row: span 11;
   }
 
   .ListItem__2 {
     grid-column: span 14;
+    grid-row: span 14;
   }
 
   .ListItem__3 {
     grid-column: span 16;
+    grid-row: span 16;
   }
 }
 
