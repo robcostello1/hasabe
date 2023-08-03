@@ -5,3 +5,10 @@
 .CardButton:not(:hover):not(:active) {
   opacity: 0.7;
 }
+
+.CardButton__MiniIcon svg {
+  width: 18px;
+  height: 18px;
+  margin: 2px 0;
+  display: block;
+}

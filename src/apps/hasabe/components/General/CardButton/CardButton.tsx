@@ -1,5 +1,6 @@
-import { Button, ButtonProps, Tooltip } from "@mui/material";
-import "./CardButton.css";
+import './CardButton.css';
+
+import { Button, ButtonProps, Tooltip } from '@mui/material';
 
 type CardButtonProps = Pick<
   ButtonProps,
@@ -22,7 +23,9 @@ const CardButton = ({
 
   return mini ? (
     <Tooltip title={children}>
-      <Button {...cardProps}>{startIcon}</Button>
+      <Button {...cardProps}>
+        <span className="CardButton__MiniIcon">{startIcon}</span>
+      </Button>
     </Tooltip>
   ) : (
     <Button {...cardProps} startIcon={startIcon}>

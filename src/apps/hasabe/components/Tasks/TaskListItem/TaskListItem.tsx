@@ -1,18 +1,15 @@
-import { motion } from "framer-motion";
-import { ReactNode, useCallback, useState } from "react";
+import './TaskListItem.css';
 
-import { CallSplit, Close, Edit } from "@mui/icons-material";
-import {
-  Card,
-  CardActions,
-  CardContent,
-  ClickAwayListener,
-  Menu,
-} from "@mui/material";
+import { motion } from 'framer-motion';
+import { ReactNode, useCallback, useMemo, useState } from 'react';
+import { useWindowSize } from 'react-use';
 
-import { Task } from "../../../utils/types";
-import { getColor } from "../../../utils/utils";
-import { CardButton } from "../../General";
+import { CallSplit, Close, Edit } from '@mui/icons-material';
+import { Card, CardActions, CardContent, ClickAwayListener, Menu } from '@mui/material';
+
+import { Task } from '../../../utils/types';
+import { getColor } from '../../../utils/utils';
+import { CardButton } from '../../General';
 
 type TaskListItemProps = {
   task: Task;
@@ -41,6 +38,26 @@ const TaskListItem = ({
   const handleClose = useCallback(() => {
     setContextMenuPosition(undefined);
   }, []);
+
+  const { width } = useWindowSize();
+
+  const mini = useMemo(() => {
+    switch (effortPoints) {
+      case 21:
+      case 13:
+        return false;
+
+      case 8:
+        return width < 410;
+
+      case 5:
+        return width < 500;
+
+      case 3:
+        return width < 1800;
+    }
+    return true;
+  }, [effortPoints, width]);
 
   return (
     <>
@@ -84,23 +101,23 @@ const TaskListItem = ({
 
           <CardActions className="TaskActions">
             <CardButton
+              mini={mini}
               onClick={() => onClickEdit(id)}
               startIcon={<Edit />}
-              mini={effortPoints < 3}
             >
               <span className="TaskActionLabel">Edit</span>
             </CardButton>
             <CardButton
+              mini={mini}
               onClick={() => onClickSplit(id)}
               startIcon={<CallSplit />}
-              mini={effortPoints < 3}
             >
               <span className="TaskActionLabel">Split</span>
             </CardButton>
             <CardButton
+              mini={mini}
               onClick={() => onClickClose(id)}
               startIcon={<Close />}
-              mini={effortPoints < 3}
             >
               <span className="TaskActionLabel">Close</span>
             </CardButton>

@@ -1,14 +1,8 @@
-import "./Calendar.css";
+import './Calendar.css';
 
-import { TagSelectorField } from "../../components/Forms/TagSelector";
-import { enumKeys, Tag } from "../../utils/types";
-import {
-  CalendarChangePayload,
-  CalendarState,
-  Day,
-  Days,
-  Periods,
-} from "../types";
+import { TagSelectorField } from '../../components/Forms/TagSelector';
+import { enumKeys, Tag } from '../../utils/types';
+import { CalendarChangePayload, CalendarState, Day, Days, Periods } from '../types';
 
 type CalendarProps = {
   availableTags: Tag[];
@@ -34,8 +28,9 @@ const Calendar = ({ availableTags, state, onChange }: CalendarProps) => {
             {(Object.keys(state) as Day[]).map((day) => (
               <td key={`${period}-${day}`}>
                 <TagSelectorField
+                  canAddTag={false}
                   onChange={(value) => onChange({ day, period, tag: value })}
-                  tags={availableTags}
+                  availableTags={availableTags}
                   value={state[day][period]}
                   label=""
                   TextFieldProps={{

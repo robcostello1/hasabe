@@ -1,13 +1,13 @@
-import { Controller, useFormContext } from "react-hook-form-mui";
+import { Controller, useFormContext } from 'react-hook-form-mui';
 
-import { Tag } from "../../../utils/types";
-import TagSelectorField from "./TagSelectorField";
+import { Tag } from '../../../utils/types';
+import TagSelectorField from './TagSelectorField';
 
 type TagSelectorProps = {
-  tags: Tag[];
+  availableTags: Tag[];
 };
 
-const TagSelector = ({ tags }: TagSelectorProps) => {
+const TagSelector = ({ availableTags }: TagSelectorProps) => {
   const { control } = useFormContext();
 
   return (
@@ -16,7 +16,11 @@ const TagSelector = ({ tags }: TagSelectorProps) => {
       name="tags"
       render={({ field: { onChange, value } }) => {
         return (
-          <TagSelectorField tags={tags} value={value} onChange={onChange} />
+          <TagSelectorField
+            availableTags={availableTags}
+            value={value}
+            onChange={onChange}
+          />
         );
       }}
     />

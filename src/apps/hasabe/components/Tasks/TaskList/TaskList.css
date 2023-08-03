@@ -8,81 +8,19 @@
   grid-auto-rows: auto;
 }
 
-.ListItem {
-  padding: var(--padding);
-  grid-column: span 8;
-  grid-row: span 8;
-  aspect-ratio: 1;
-  overflow: hidden;
-}
-
-.ListItem__0, 
-.ListItem__1,
-.ListItem__2 {
-  font-size: 14px;
-}
-
-.ListItem__2 {
-  grid-column: span 11;
-  grid-row: span 11;
-}
-
-.ListItem__3 {
-  grid-column: span 14;
-  grid-row: span 14;
-}
-
-.ListItem__5 {
-  grid-column: span 18;
-  grid-row: span 18;
-}
-
-.ListItem__8 {
-  grid-column: span 23;
-  grid-row: span 23;
-}
-
-.ListItem__13 {
-  grid-column: span 29;
-  grid-row: span 29;
-}
-
-.ListItem__21 {
-  grid-column: span 37;
-  grid-row: span 37;
-}
-
-.TaskName {
-  padding: var(--padding) !important;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.TaskActions {
-  padding: var(--padding) !important;
-}
-
-.TaskActions>:not(:first-of-type) {
-  margin-left: var(--padding) !important;
-}
-
-.TaskActionLabel {
-  display: none;
-}
-
 /* Media query at tablet portrait */
 @media (min-width: 768px) {
   .ListContainer {
     --padding: 8px;
     margin: 16px -8px;
-    grid-template-columns: repeat(65, minmax(0, 1fr));
+    grid-template-columns: repeat(55, minmax(0, 1fr));
   }
 }
 
 /* Media query at desktop */
 @media (min-width: 1024px) {
   .ListContainer {
-    grid-template-columns: repeat(80, minmax(0, 1fr));
+    grid-template-columns: repeat(70, minmax(0, 1fr));
   }
 }
 
@@ -90,9 +28,5 @@
 @media (min-width: 1440px) {
   .ListContainer {
     grid-template-columns: repeat(100, minmax(0, 1fr));
-  }
-
-  .TaskActionLabel {
-    display: inline-block;
   }
 }

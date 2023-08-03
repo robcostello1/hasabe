@@ -1,0 +1,65 @@
+.ListItem {
+  padding: var(--padding);
+  grid-column: span 8;
+
+  aspect-ratio: 1;
+  overflow: hidden;
+}
+
+.ListItem__0 .TaskName,
+.ListItem__1 .TaskName,
+.ListItem__2 .TaskName {
+  font-size: 14px;
+}
+
+.ListItem__2 {
+  grid-column: span 11;
+}
+
+.ListItem__3 {
+  grid-column: span 14;
+}
+
+.ListItem__5 {
+  grid-column: span 18;
+}
+
+.ListItem__8 {
+  grid-column: span 23;
+}
+
+.ListItem__13 {
+  grid-column: span 29;
+}
+
+.ListItem__21 {
+  grid-column: span 37;
+}
+
+@media (max-width: 599.9px) {
+  .ListItem__1 {
+    grid-column: span 11;
+  }
+
+  .ListItem__2 {
+    grid-column: span 14;
+  }
+
+  .ListItem__3 {
+    grid-column: span 16;
+  }
+}
+
+.TaskName {
+  padding: var(--padding) !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.TaskActions {
+  padding: var(--padding) !important;
+}
+
+.TaskActions > :not(:first-of-type) {
+  margin-left: var(--padding) !important;
+}

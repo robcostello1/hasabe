@@ -1,17 +1,17 @@
-import "./TaskUi.css";
+import './TaskUi.css';
 
-import { useCallback, useMemo, useState } from "react";
-import { useKeyPressEvent, useToggle } from "react-use";
+import { useCallback, useMemo, useState } from 'react';
+import { useKeyPressEvent, useToggle } from 'react-use';
 
-import { Dialog, MenuItem } from "@mui/material";
+import { Dialog, MenuItem } from '@mui/material';
 
-import { EditableTask, Tag, Task } from "../../../utils/types";
-import { useTagMethods } from "../../Tags/hooks";
-import AddTask from "../AddTask";
-import { useTaskMethods } from "../hooks";
-import TaskFilters from "../TaskFilters/TaskFilters";
-import TaskList from "../TaskList";
-import TaskListActions from "../TaskListActions";
+import { EditableTask, Tag, Task } from '../../../utils/types';
+import { useTagMethods } from '../../Tags/hooks';
+import AddTask from '../AddTask';
+import { useTaskMethods } from '../hooks';
+import TaskFilters from '../TaskFilters/TaskFilters';
+import TaskList from '../TaskList';
+import TaskListActions from '../TaskListActions';
 
 function TaskUi({ debug }: { debug?: boolean }) {
   const [addModalOpen, setAddModalOpen] = useToggle(false);
@@ -174,7 +174,7 @@ function TaskUi({ debug }: { debug?: boolean }) {
         <AddTask
           mode={mode}
           currentTask={currentTask}
-          tags={tags}
+          availableTags={tags}
           onClose={handleCloseModal}
           onSplit={handleSplitSubmit}
           onSubmit={handleDefaultSubmit}

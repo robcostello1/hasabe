@@ -1,34 +1,20 @@
-import "./AddTask.css";
+import './AddTask.css';
 
+import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
 import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
-import {
-  Controller,
-  FormContainer,
-  SelectElement,
-  TextFieldElement,
-  useFormContext,
-} from "react-hook-form-mui";
+    Controller, FormContainer, SelectElement, TextFieldElement, useFormContext
+} from 'react-hook-form-mui';
 
-import {
-  Box,
-  Button,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-} from "@mui/material";
+import { Box, Button, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 // TODO introduce large dependencies (e.g. refractor)
 // @ts-ignore
-import MDEditor from "@uiw/react-md-editor";
+import MDEditor from '@uiw/react-md-editor';
 
-import { POINT_SCALE } from "../../../utils/consts";
-import { EditableTask, Tag, UpdateMode } from "../../../utils/types";
-import { TagSelector } from "../../Forms";
+import { POINT_SCALE } from '../../../utils/consts';
+import { useLog } from '../../../utils/hooks';
+import { EditableTask, Tag, UpdateMode } from '../../../utils/types';
+import { TagSelector } from '../../Forms';
+import { useTagMethods } from '../../Tags/hooks';
 
 type FormValues = Pick<EditableTask, "name" | "body" | "tags"> & {
   worryPoints: "" | number;
@@ -43,23 +29,25 @@ const defaultValue: FormValues = {
 };
 
 type Props = {
-  mode: UpdateMode;
+  mode?: UpdateMode;
   currentTask?: EditableTask;
-  tags?: Tag[];
+  availableTags?: Tag[];
   onClose: () => void;
   onSubmit: (task: EditableTask) => void;
   onSplit: (origTask: EditableTask, newTask: EditableTask) => void;
 };
 
 const AddTaskForm = ({
-  tags,
+  availableTags,
   onChange,
 }: {
-  tags?: Tag[];
+  availableTags?: Tag[];
   onChange?: Dispatch<SetStateAction<FormValues>>;
 }) => {
   const { watch } = useFormContext<EditableTask>();
   const values = JSON.stringify(watch());
+
+  useLog(availableTags, "availableTags");
 
   useEffect(() => {
     if (onChange) {
@@ -105,7 +93,7 @@ const AddTaskForm = ({
         fullWidth
       />
 
-      <TagSelector tags={tags || []} />
+      <TagSelector availableTags={availableTags || []} />
     </>
   );
 };
@@ -115,9 +103,9 @@ const valuesValidate = (values: FormValues): values is EditableTask =>
   typeof values.effortPoints === "number";
 
 export default function AddTask({
-  mode,
+  mode = "single",
   currentTask,
-  tags,
+  availableTags,
   onClose,
   onSubmit,
   onSplit,
@@ -128,29 +116,45 @@ export default function AddTask({
     worryPoints: currentTask?.worryPoints || defaultValue.worryPoints,
   });
 
+  const { handleAddTag } = useTagMethods();
+  const createTag = useCallback(
+    async (nameOrId?: string) => {
+      if (!nameOrId || availableTags?.find(({ id }) => id === nameOrId)) {
+        return nameOrId;
+      }
+      return await handleAddTag(nameOrId);
+    },
+    [availableTags, handleAddTag]
+  );
+
   const handleSubmit = useCallback(
-    (values: FormValues) => {
-      console.log("handleSubmit", values);
+    async (values: FormValues) => {
       if (valuesValidate(values)) {
-        onSubmit(values);
+        const tagId = await createTag(values.tags);
+        onSubmit({ ...values, tags: tagId });
         return;
       }
       // TODO show form warnings
       console.warn("Could not submit task: missing points");
     },
-    [onSubmit]
+    [createTag, onSubmit]
   );
 
   const handleSplit = useCallback(
-    (origTask: FormValues, newTask: FormValues) => {
+    async (origTask: FormValues, newTask: FormValues) => {
       if (valuesValidate(origTask) && valuesValidate(newTask)) {
-        onSplit(origTask, newTask);
+        const origTagId = await createTag(origTask.tags);
+        const newTagId = await createTag(newTask.tags);
+        onSplit(
+          { ...origTask, tags: origTagId },
+          { ...newTask, tags: newTagId }
+        );
         return;
       }
       // TODO show form warnings
       console.warn("Could not submit task: missing points");
     },
-    [onSplit]
+    [createTag, onSplit]
   );
 
   return mode === "single" ? (
@@ -161,7 +165,7 @@ export default function AddTask({
       <DialogTitle>{currentTask ? "Edit" : "Add"} task</DialogTitle>
 
       <DialogContent className="AddTask__form">
-        <AddTaskForm tags={tags} />
+        <AddTaskForm availableTags={availableTags} />
       </DialogContent>
 
       <DialogActions>
@@ -178,13 +182,16 @@ export default function AddTask({
       <DialogContent className="AddTask__split">
         <div className="AddTask__form">
           <FormContainer defaultValues={currentTask}>
-            <AddTaskForm onChange={setSplitOrig} tags={tags} />
+            <AddTaskForm
+              onChange={setSplitOrig}
+              availableTags={availableTags}
+            />
           </FormContainer>
         </div>
 
         <div className="AddTask__form">
           <FormContainer defaultValues={defaultValue}>
-            <AddTaskForm onChange={setSplitNew} tags={tags} />
+            <AddTaskForm onChange={setSplitNew} availableTags={availableTags} />
           </FormContainer>
         </div>
       </DialogContent>
