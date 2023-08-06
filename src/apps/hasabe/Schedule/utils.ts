@@ -1,4 +1,5 @@
 import { enumKeys } from '../utils/types';
+import { arrayRotate } from '../utils/utils';
 import { Day, Days, Period } from './types';
 
 const periodDefinition: Record<Period, number> = {
@@ -14,7 +15,7 @@ export const getCurrentPeriod = (
   timestamp: number
 ): { day: Day; period: Period } => {
   return {
-    day: enumKeys(Days)[new Date(timestamp).getDay() - 1],
+    day: arrayRotate(enumKeys(Days), true)[new Date(timestamp).getDay()],
     period:
       (Object.entries(periodDefinition) as [Period, number][]).find(
         ([_, startTime]) => timestamp % DAY_LENGTH >= startTime

@@ -16,12 +16,16 @@ type UseTasksMethodsProps = {
   };
 };
 
+const DEFAULT_QUERY: MangoQuery<Task> = {
+  sort: [{ orderIndex: "asc" }],
+};
+
 export const useTaskMethods = ({ filters }: UseTasksMethodsProps) => {
   const [currentTaskId, setCurrentTaskId] = useState<string | undefined>();
   const tasksTable = useMemo(async () => (await db).tasks, []);
 
   const [debouncedSearch, setDebouncedSearch] = useState<string | null>(null);
-  const [, cancel] = useDebounce(
+  useDebounce(
     () => {
       setDebouncedSearch(filters?.search || null);
     },
@@ -29,19 +33,21 @@ export const useTaskMethods = ({ filters }: UseTasksMethodsProps) => {
     [filters?.search]
   );
 
-  useEffect(() => () => cancel(), [cancel]);
-
-  const tasksSelectOptions = useMemo<MangoQuery<any>>(() => {
-    return {
-      sort: [{ orderIndex: "asc" }],
-      // TODO expand this to support multiple tags and other filters
-      selector: {
-        tags: filters?.tag ? { $eq: filters.tag } : undefined,
-        name: debouncedSearch
-          ? { $regex: new RegExp(debouncedSearch, "i") }
-          : undefined,
-      },
-    };
+  const tasksSelectOptions = useMemo<MangoQuery<Task>>(() => {
+    const query = { ...DEFAULT_QUERY };
+    if (filters?.tag) {
+      query.selector = {
+        ...query.selector,
+        tags: { $eq: filters.tag },
+      };
+    }
+    if (debouncedSearch) {
+      query.selector = {
+        ...query.selector,
+        name: { $regex: new RegExp(debouncedSearch, "i") },
+      };
+    }
+    return query;
   }, [filters?.tag, debouncedSearch]);
 
   const tasks = useSelect<Task>(tasksTable, tasksSelectOptions);
