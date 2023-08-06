@@ -1,5 +1,7 @@
 import { generateKeyBetween } from 'fractional-indexing';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useDebounce } from 'react-use';
+import { MangoQuery } from 'rxdb';
 // @ts-ignore
 import { v4 as uuidv4 } from 'uuid';
 
@@ -9,23 +11,47 @@ import { EditableTask, Task, UpdateMode } from '../../../utils/types';
 
 type UseTasksMethodsProps = {
   filters?: {
-    tag?: string;
+    tag: string | null;
+    search: string | null;
   };
+};
+
+const DEFAULT_QUERY: MangoQuery<Task> = {
+  sort: [{ orderIndex: "asc" }],
 };
 
 export const useTaskMethods = ({ filters }: UseTasksMethodsProps) => {
   const [currentTaskId, setCurrentTaskId] = useState<string | undefined>();
   const tasksTable = useMemo(async () => (await db).tasks, []);
 
-  const tasks = useSelect<Task>(tasksTable, {
-    sort: [{ orderIndex: "asc" }],
-    // TODO expand this to support multiple tags and other filters
-    selector: filters?.tag
-      ? {
-          tags: { $eq: filters.tag },
-        }
-      : undefined,
-  });
+  const [debouncedSearch, setDebouncedSearch] = useState<string | null>(null);
+  useDebounce(
+    () => {
+      setDebouncedSearch(filters?.search || null);
+    },
+    500,
+    [filters?.search]
+  );
+
+  const tasksSelectOptions = useMemo<MangoQuery<Task>>(() => {
+    const query = { ...DEFAULT_QUERY };
+    if (filters?.tag) {
+      query.selector = {
+        ...query.selector,
+        tags: { $eq: filters.tag },
+      };
+    }
+    if (debouncedSearch) {
+      query.selector = {
+        ...query.selector,
+        name: { $regex: new RegExp(debouncedSearch, "i") },
+      };
+    }
+    return query;
+  }, [filters?.tag, debouncedSearch]);
+
+  const tasks = useSelect<Task>(tasksTable, tasksSelectOptions);
+
   const [mode, setMode] = useState<UpdateMode>("single");
   const [highestOrderIndex, setHighestOrderIndex] = useState<string | null>(
     null

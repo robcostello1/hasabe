@@ -23,3 +23,15 @@ export const getColor = (
     (Math.cbrt(points / maxPoints) + Math.sqrt(points / maxPoints)) / 2;
   return redgreen(value).toString();
 };
+
+export const arrayRotate = <T>(arr: T[], reverse?: boolean) => {
+  if (!arr.length) {
+    return arr;
+  }
+  if (reverse) {
+    arr.unshift(arr.pop() as T);
+  } else {
+    arr.push(arr.shift() as T);
+  }
+  return arr;
+};

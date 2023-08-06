@@ -1,15 +1,15 @@
-import { useEffect, useReducer, useRef, useState } from "react";
-import { useLocalStorage } from "react-use";
+import { useEffect, useReducer, useRef, useState } from 'react';
+import { useLocalStorage } from 'react-use';
 
-import { CalendarViewDay } from "@mui/icons-material";
-import SettingsIcon from "@mui/icons-material/Settings";
-import { Button, Dialog, DialogContent, IconButton } from "@mui/material";
+import { CalendarViewDay } from '@mui/icons-material';
+import SettingsIcon from '@mui/icons-material/Settings';
+import { Button, Dialog, DialogContent, IconButton } from '@mui/material';
 
-import { Tag } from "../../utils/types";
-import Calendar from "../Calendar";
-import { calendarReducer, DEFAULT_CALENDAR_STATE } from "../reducer";
-import { CalendarState } from "../types";
-import { getCurrentPeriod } from "../utils";
+import { Tag } from '../../utils/types';
+import Calendar from '../Calendar';
+import { calendarReducer, DEFAULT_CALENDAR_STATE } from '../reducer';
+import { CalendarState } from '../types';
+import { getCurrentPeriod } from '../utils';
 
 type ScheduleUiProps = {
   availableTags: Tag[];

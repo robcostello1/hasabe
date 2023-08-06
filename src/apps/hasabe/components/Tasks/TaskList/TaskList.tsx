@@ -1,6 +1,6 @@
 import './TaskList.css';
 
-import { ReactNode, useRef } from 'react';
+import { MouseEvent, ReactNode, useCallback, useRef } from 'react';
 
 import { Task } from '../../../utils/types';
 import TaskListItem from '../TaskListItem/TaskListItem';
@@ -28,14 +28,19 @@ const TaskList = ({
 }: TaskListProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
+  const handleClickBackground = useCallback(
+    (e: MouseEvent<HTMLDivElement>) => {
+      e.stopPropagation();
+      onUnselectTask();
+    },
+    [onUnselectTask]
+  );
+
   return (
     <div
       ref={containerRef}
       className={"ListContainer"}
-      onClick={(e) => {
-        e.stopPropagation();
-        onUnselectTask();
-      }}
+      onClick={handleClickBackground}
     >
       {tasks?.map((task) => (
         <TaskListItem
