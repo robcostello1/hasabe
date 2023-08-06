@@ -18,7 +18,10 @@ function TaskUi({ debug }: { debug?: boolean }) {
   const [tag, setTag] = useState<string | null>(null);
   const [search, setSearch] = useState<string | null>(null);
   // TODO causes flashes
-  // const taskFilters = useMemo(() => ({ tag: tag || undefined }), [tag]);
+  const taskProps = useMemo(
+    () => ({ filters: { tag, search } }),
+    [tag, search]
+  );
 
   const {
     currentTaskId,
@@ -34,7 +37,7 @@ function TaskUi({ debug }: { debug?: boolean }) {
     handleResetOrder,
     setCurrentTaskId,
     setMode,
-  } = useTaskMethods({});
+  } = useTaskMethods(taskProps);
 
   const handleOpenModal = useCallback(() => {
     setCurrentTaskId(undefined);
@@ -97,20 +100,58 @@ function TaskUi({ debug }: { debug?: boolean }) {
 
   const { tags } = useTagMethods();
 
+  // TODO multiple tags
   const activeTags = useMemo(() => [tag], [tag]);
 
-  const filteredTasks = useMemo(() => {
-    if (!search && !tag) {
-      return tasks;
-    }
+  const handleUnselectTask = useCallback(() => {
+    setCurrentTaskId(undefined);
+  }, [setCurrentTaskId]);
 
-    return tasks.filter(({ name, tags: currentTags }) => {
-      const searchMatch =
-        !search || name.toLowerCase().includes(search.toLowerCase());
-      const tagMatch = !tag || currentTags === tag;
-      return searchMatch && tagMatch;
-    });
-  }, [tasks, search, tag]);
+  const handleClickedEditTask = useCallback(
+    (id: string) => {
+      setCurrentTaskId(id);
+      setAddModalOpen(id);
+    },
+    [setCurrentTaskId, setAddModalOpen]
+  );
+
+  const handleSplitTask = useCallback(
+    (id: string) => {
+      setMode("split");
+      setCurrentTaskId(id);
+      setAddModalOpen(id);
+    },
+    [setCurrentTaskId, setAddModalOpen, setMode]
+  );
+
+  const handleRenderContextMenu = useCallback(
+    (id: string, handleClose: () => void) => [
+      <MenuItem
+        key="move-top"
+        onClick={() => {
+          handleMoveTaskToTop(id);
+          handleClose();
+        }}
+      >
+        Move to top
+      </MenuItem>,
+      <MenuItem
+        key="move-bottom"
+        onClick={() => {
+          handleMoveTaskToBottom(id);
+          handleClose();
+        }}
+      >
+        Move to bottom
+      </MenuItem>,
+    ],
+    [handleMoveTaskToBottom, handleMoveTaskToTop]
+  );
+
+  const handleCloseAddTaskModal = useCallback(
+    () => setAddModalOpen(false),
+    [setAddModalOpen]
+  );
 
   return (
     <div className="App">
@@ -129,47 +170,21 @@ function TaskUi({ debug }: { debug?: boolean }) {
       />
 
       <TaskList
-        tasks={filteredTasks}
+        tasks={tasks}
         currentTaskId={currentTaskId}
         onSelectTask={setCurrentTaskId}
-        onUnselectTask={() => setCurrentTaskId(undefined)}
-        onClickEditTask={(id) => {
-          setCurrentTaskId(id);
-          setAddModalOpen(id);
-        }}
-        onClickSplitTask={(id) => {
-          setMode("split");
-          setCurrentTaskId(id);
-          setAddModalOpen(id);
-        }}
-        onClickCloseTask={(id) => handleRemoveTask(id)}
-        renderContextMenu={(id, handleClose) => [
-          <MenuItem
-            key="move-top"
-            onClick={() => {
-              handleMoveTaskToTop(id);
-              handleClose();
-            }}
-          >
-            Move to top
-          </MenuItem>,
-          <MenuItem
-            key="move-bottom"
-            onClick={() => {
-              handleMoveTaskToBottom(id);
-              handleClose();
-            }}
-          >
-            Move to bottom
-          </MenuItem>,
-        ]}
+        onUnselectTask={handleUnselectTask}
+        onClickEditTask={handleClickedEditTask}
+        onClickSplitTask={handleSplitTask}
+        onClickCloseTask={handleRemoveTask}
+        renderContextMenu={handleRenderContextMenu}
       />
 
       <Dialog
         maxWidth={mode === "split" ? "lg" : undefined}
         open={addModalOpen}
         data-mui-color-scheme="dark"
-        onClose={() => setAddModalOpen(false)}
+        onClose={handleCloseAddTaskModal}
       >
         <AddTask
           mode={mode}

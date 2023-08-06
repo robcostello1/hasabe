@@ -1,7 +1,7 @@
 import './TaskListItem.css';
 
 import { motion } from 'framer-motion';
-import { ReactNode, useCallback, useMemo, useState } from 'react';
+import { memo, MouseEvent, ReactNode, useCallback, useMemo, useState } from 'react';
 import { useWindowSize } from 'react-use';
 
 import { CallSplit, Close, Edit } from '@mui/icons-material';
@@ -59,6 +59,37 @@ const TaskListItem = ({
     return true;
   }, [effortPoints, width]);
 
+  const handleContextMenu = useCallback((e: MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setContextMenuPosition({ top: e.clientY, left: e.clientX });
+  }, []);
+
+  const handleCardClick = useCallback(
+    (e: MouseEvent<HTMLDivElement>) => {
+      e.stopPropagation();
+      onSelect(id);
+    },
+    [onSelect, id]
+  );
+
+  const cardStyle = useMemo(
+    () => ({
+      backgroundColor: getColor(worryPoints),
+    }),
+    [worryPoints]
+  );
+
+  const handleClickEdit = useCallback(() => onClickEdit(id), [onClickEdit, id]);
+  const handleClickSplit = useCallback(
+    () => onClickSplit(id),
+    [onClickSplit, id]
+  );
+  const handleClickClose = useCallback(
+    () => onClickClose(id),
+    [onClickClose, id]
+  );
+
   return (
     <>
       {renderContextMenu && (
@@ -80,21 +111,11 @@ const TaskListItem = ({
         className={`ListItem ListItem__${effortPoints}`}
         key={id}
         // transition={{ duration: isInView ? 0.2 : 0 }}
-        onContextMenu={(e) => {
-          console.log(e);
-          e.preventDefault();
-          e.stopPropagation();
-          setContextMenuPosition({ top: e.clientY, left: e.clientX });
-        }}
+        onContextMenu={handleContextMenu}
       >
         <Card
-          onClick={(e) => {
-            e.stopPropagation();
-            onSelect(id);
-          }}
-          style={{
-            backgroundColor: getColor(worryPoints),
-          }}
+          onClick={handleCardClick}
+          style={cardStyle}
           className={active ? "Card Card__active" : "Card"}
         >
           <CardContent className="TaskName">{name}</CardContent>
@@ -102,21 +123,21 @@ const TaskListItem = ({
           <CardActions className="TaskActions">
             <CardButton
               mini={mini}
-              onClick={() => onClickEdit(id)}
+              onClick={handleClickEdit}
               startIcon={<Edit />}
             >
               <span className="TaskActionLabel">Edit</span>
             </CardButton>
             <CardButton
               mini={mini}
-              onClick={() => onClickSplit(id)}
+              onClick={handleClickSplit}
               startIcon={<CallSplit />}
             >
               <span className="TaskActionLabel">Split</span>
             </CardButton>
             <CardButton
               mini={mini}
-              onClick={() => onClickClose(id)}
+              onClick={handleClickClose}
               startIcon={<Close />}
             >
               <span className="TaskActionLabel">Close</span>
@@ -128,4 +149,4 @@ const TaskListItem = ({
   );
 };
 
-export default TaskListItem;
+export default memo(TaskListItem);
