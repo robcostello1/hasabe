@@ -1,3 +1,4 @@
+import { arrayMoveImmutable } from 'array-move';
 import { generateKeyBetween } from 'fractional-indexing';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDebounce } from 'react-use';
@@ -50,7 +51,7 @@ export const useTaskMethods = ({ filters }: UseTasksMethodsProps) => {
     return query;
   }, [filters?.tag, debouncedSearch]);
 
-  const tasks = useSelect<Task>(tasksTable, tasksSelectOptions);
+  const [tasks, setTasks] = useSelect<Task>(tasksTable, tasksSelectOptions);
 
   const [mode, setMode] = useState<UpdateMode>("single");
   const [highestOrderIndex, setHighestOrderIndex] = useState<string | null>(
@@ -158,6 +159,28 @@ export const useTaskMethods = ({ filters }: UseTasksMethodsProps) => {
     [tasks, handleEditTask]
   );
 
+  const [debouncedMove, setDebouncedMove] = useState<{
+    id: string;
+    orderIndex: string;
+  } | null>(null);
+  const handleEndMoveTask = useCallback(
+    (id: string, orderIndex: string) => {
+      handleEditTask({ id, orderIndex });
+    },
+    [handleEditTask]
+  );
+  useDebounce(
+    () => {
+      if (!debouncedMove) {
+        return;
+      }
+      handleEndMoveTask(debouncedMove.id, debouncedMove.orderIndex);
+      setDebouncedMove(null);
+    },
+    2000,
+    [debouncedMove]
+  );
+
   const handleMoveTask = useCallback(
     (id: string, offset: number) => {
       const currentIndex = tasks.indexOf(tasks.find((task) => task.id === id)!);
@@ -175,9 +198,12 @@ export const useTaskMethods = ({ filters }: UseTasksMethodsProps) => {
         tasks[targetIndexRight]?.orderIndex
       );
 
-      handleEditTask({ id, orderIndex });
+      // Edit the task list directly so we can debounce the update later
+      setTasks(arrayMoveImmutable(tasks, currentIndex, currentIndex + offset));
+      setDebouncedMove({ id, orderIndex });
     },
-    [tasks, handleEditTask]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [tasks, setTasks, handleEndMoveTask]
   );
 
   return {

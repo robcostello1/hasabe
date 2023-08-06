@@ -11,7 +11,7 @@ const QUERY: MangoQuery<{ name: string }> = { sort: [{ name: "asc" }] };
 
 export const useTagMethods = () => {
   const tagsTable = useMemo(async () => (await db).tags, []);
-  const tags = useSelect<Tag>(tagsTable, QUERY);
+  const [tags] = useSelect<Tag>(tagsTable, QUERY);
 
   const handleAddTag = useCallback(
     async (name: string) => {

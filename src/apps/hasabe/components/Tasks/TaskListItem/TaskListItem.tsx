@@ -128,13 +128,15 @@ const TaskListItem = ({
             >
               <span className="TaskActionLabel">Edit</span>
             </CardButton>
-            <CardButton
-              mini={mini}
-              onClick={handleClickSplit}
-              startIcon={<CallSplit />}
-            >
-              <span className="TaskActionLabel">Split</span>
-            </CardButton>
+            {effortPoints > 1 && (
+              <CardButton
+                mini={mini}
+                onClick={handleClickSplit}
+                startIcon={<CallSplit />}
+              >
+                <span className="TaskActionLabel">Split</span>
+              </CardButton>
+            )}
             <CardButton
               mini={mini}
               onClick={handleClickClose}
