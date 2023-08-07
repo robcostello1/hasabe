@@ -36,24 +36,57 @@ const TaskList = ({
     [onUnselectTask]
   );
 
+  // const locations = useRef<{ x: number; y: number }[]>([]);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     containerRef.current?.childNodes.forEach((node, index) => {
+  //       locations.current[index] = {
+  //         x: (node as HTMLDivElement).clientLeft,
+  //         y: (node as HTMLDivElement).clientTop,
+  //       };
+  //     });
+  //   }, TRANSITION_DURATION + 1);
+  // }, [tasks]);
+
+  // const [draggedItemLocation, setDraggedItemLocation] = useState<{
+  //   id: string;
+  //   x: number;
+  //   y: number;
+  //   index: number;
+  // } | null>(null);
+  // useDebounce(
+  //   () => {
+  //     console.log(draggedItemLocation);
+  //   },
+  //   1000,
+  //   [draggedItemLocation]
+  // );
+
   return (
     <div
       ref={containerRef}
       className={"ListContainer"}
       onClick={handleClickBackground}
     >
-      {tasks?.map((task) => (
-        <TaskListItem
-          key={task.id}
-          active={currentTaskId === task.id}
-          task={task}
-          renderContextMenu={renderContextMenu}
-          onSelect={onSelectTask}
-          onClickEdit={onClickEditTask}
-          onClickSplit={onClickSplitTask}
-          onClickClose={onClickCloseTask}
-        />
-      ))}
+      {tasks?.map(
+        (
+          task
+          // index
+        ) => (
+          <TaskListItem
+            key={task.id}
+            active={currentTaskId === task.id}
+            task={task}
+            // index={index}
+            // onDrag={setDraggedItemLocation}
+            renderContextMenu={renderContextMenu}
+            onSelect={onSelectTask}
+            onClickEdit={onClickEditTask}
+            onClickSplit={onClickSplitTask}
+            onClickClose={onClickCloseTask}
+          />
+        )
+      )}
     </div>
   );
 };

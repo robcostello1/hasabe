@@ -1,0 +1,12 @@
+.KeyboardShortcut {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5rem;
+  height: 1.5rem;
+}
+.KeyboardShortcut__up,
+.KeyboardShortcut__down {
+  padding-bottom: 3px;
+}

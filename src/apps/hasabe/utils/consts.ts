@@ -7,3 +7,5 @@ export const POINT_SCALE = [
   { id: 13, label: 13 },
   { id: 21, label: 21 },
 ];
+
+export const TRANSITION_DURATION = 300;

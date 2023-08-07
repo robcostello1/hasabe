@@ -1,17 +1,16 @@
-import './TaskUi.css';
+import { useCallback, useMemo, useState } from "react";
+import { useKeyPressEvent, useToggle } from "react-use";
 
-import { useCallback, useMemo, useState } from 'react';
-import { useKeyPressEvent, useToggle } from 'react-use';
+import { Dialog } from "@mui/material";
 
-import { Dialog, MenuItem } from '@mui/material';
-
-import { EditableTask, Tag, Task } from '../../../utils/types';
-import { useTagMethods } from '../../Tags/hooks';
-import AddTask from '../AddTask';
-import { useTaskMethods } from '../hooks';
-import TaskFilters from '../TaskFilters/TaskFilters';
-import TaskList from '../TaskList';
-import TaskListActions from '../TaskListActions';
+import { EditableTask, Tag, Task } from "../../../utils/types";
+import { ContextMenuItem } from "../../General";
+import { useTagMethods } from "../../Tags/hooks";
+import AddTask from "../AddTask";
+import { useTaskMethods } from "../hooks";
+import TaskFilters from "../TaskFilters/TaskFilters";
+import TaskList from "../TaskList";
+import TaskListActions from "../TaskListActions";
 
 function TaskUi({ debug }: { debug?: boolean }) {
   const [addModalOpen, setAddModalOpen] = useToggle(false);
@@ -126,7 +125,25 @@ function TaskUi({ debug }: { debug?: boolean }) {
 
   const handleRenderContextMenu = useCallback(
     (id: string, handleClose: () => void) => [
-      <MenuItem
+      <ContextMenuItem
+        key="move-up"
+        onClick={() => {
+          handleMoveTask(id, -1);
+        }}
+        shortcut={["up"]}
+      >
+        Move up
+      </ContextMenuItem>,
+      <ContextMenuItem
+        key="move-down"
+        onClick={() => {
+          handleMoveTask(id, 1);
+        }}
+        shortcut={["down"]}
+      >
+        Move down
+      </ContextMenuItem>,
+      <ContextMenuItem
         key="move-top"
         onClick={() => {
           handleMoveTaskToTop(id);
@@ -134,8 +151,8 @@ function TaskUi({ debug }: { debug?: boolean }) {
         }}
       >
         Move to top
-      </MenuItem>,
-      <MenuItem
+      </ContextMenuItem>,
+      <ContextMenuItem
         key="move-bottom"
         onClick={() => {
           handleMoveTaskToBottom(id);
@@ -143,9 +160,9 @@ function TaskUi({ debug }: { debug?: boolean }) {
         }}
       >
         Move to bottom
-      </MenuItem>,
+      </ContextMenuItem>,
     ],
-    [handleMoveTaskToBottom, handleMoveTaskToTop]
+    [handleMoveTaskToBottom, handleMoveTaskToTop, handleMoveTask]
   );
 
   const handleCloseAddTaskModal = useCallback(
