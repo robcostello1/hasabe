@@ -22,10 +22,10 @@ export type Tag = {
   name: string;
 };
 
-export type SettingsItem = {
+export type SettingsItem<T = {}> = {
   id: string;
   name: string;
-  value: any;
+  value: T;
 };
 
 // TODO move to utils

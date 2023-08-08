@@ -2,12 +2,12 @@ import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { Subscription } from "react-hook-form/dist/utils/createSubject";
 import { MangoQuery, RxCollection } from "rxdb";
 
-export const useSelect = <T extends { id: string }>(
+export const useSelectSingle = <T extends { id: string }>(
   table: Promise<RxCollection>,
   queryObj?: MangoQuery<T>
-): [T[], Dispatch<SetStateAction<T[]>>] => {
+): [T | undefined, Dispatch<SetStateAction<T | undefined>>] => {
   const subscription = useRef<Subscription>();
-  const [entities, setEntities] = useState<T[]>([]);
+  const [entity, setEntity] = useState<T>();
 
   useEffect(() => {
     (async () => {
@@ -16,10 +16,10 @@ export const useSelect = <T extends { id: string }>(
         subscription.current?.unsubscribe();
 
         subscription.current = tableReady
-          // Spread to avoid mutation of query object
-          .find({ ...queryObj })
-          .$.subscribe((newEntities) => {
-            setEntities(newEntities.map((entity) => entity.toJSON()));
+          // Query object is mutated in this function
+          .findOne({ ...queryObj })
+          .$.subscribe((newEntity) => {
+            newEntity && setEntity(newEntity.toJSON());
           });
       }
     })();
@@ -29,5 +29,5 @@ export const useSelect = <T extends { id: string }>(
     };
   }, [table, queryObj]);
 
-  return [entities, setEntities];
+  return [entity, setEntity];
 };
