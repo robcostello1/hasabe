@@ -1,4 +1,5 @@
-import Theme from "../../components/Theme";
+import { Theme } from "components";
+
 import { AuthProvider, AuthWrapper, Login } from "./components/Auth";
 import { TaskUi } from "./components/Tasks";
 

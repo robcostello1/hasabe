@@ -22,6 +22,12 @@ export type Tag = {
   name: string;
 };
 
+export type SettingsItem = {
+  id: string;
+  name: string;
+  value: any;
+};
+
 // TODO move to utils
 export function enumKeys<O extends object, K extends keyof O = keyof O>(
   obj: O

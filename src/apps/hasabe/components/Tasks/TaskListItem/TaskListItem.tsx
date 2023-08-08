@@ -1,6 +1,7 @@
 import "./TaskListItem.css";
 
 import classNames from "classnames";
+import { CardButton } from "components";
 import { motion } from "framer-motion";
 import {
   forwardRef,
@@ -25,7 +26,6 @@ import {
 import { TRANSITION_DURATION } from "../../../utils/consts";
 import { Task } from "../../../utils/types";
 import { getColor } from "../../../utils/utils";
-import { CardButton } from "../../General";
 
 type TaskListItemProps = {
   task: Task;

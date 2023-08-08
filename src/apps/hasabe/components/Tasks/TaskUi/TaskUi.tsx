@@ -1,10 +1,10 @@
+import { ContextMenuItem } from "components";
 import { useCallback, useMemo, useState } from "react";
 import { useKeyPressEvent, useToggle } from "react-use";
 
 import { Dialog } from "@mui/material";
 
 import { EditableTask, Tag, Task } from "../../../utils/types";
-import { ContextMenuItem } from "../../General";
 import { useTagMethods } from "../../Tags/hooks";
 import AddTask from "../AddTask";
 import { useTaskMethods } from "../hooks";

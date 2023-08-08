@@ -1,7 +1,8 @@
+import { UtilityBar } from "components";
+
 import { Button } from "@mui/material";
 
 import { EditableTask } from "../../../utils/types";
-import UtilityBar from "../../General/UtilityBar/UtilityBar";
 import UserActions from "../../UserActions/UserActions";
 
 type TaskListActionsProps = {

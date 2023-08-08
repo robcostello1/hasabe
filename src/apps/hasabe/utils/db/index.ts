@@ -10,6 +10,7 @@ import { getRxStorageDexie } from "rxdb/plugins/storage-dexie";
 
 import { createClient } from "@supabase/supabase-js";
 
+import { settings } from "./settings";
 import { tags } from "./tags";
 import { tasks } from "./tasks";
 
@@ -31,11 +32,6 @@ const setupDB = async () => {
     ignoreDuplicate: true,
     name: "hasabe",
     storage: getRxStorageDexie(), // Uses IndexedDB
-  });
-
-  const collections = await db.addCollections({
-    tags,
-    tasks,
   });
 
   const initialCheckpoint: SupabaseReplicationCheckpoint = {
@@ -61,6 +57,12 @@ const setupDB = async () => {
     }, // If absent, no changes are pushed to Supabase
   };
 
+  const collections = await db.addCollections({
+    tags,
+    tasks,
+    settings,
+  });
+
   new SupabaseReplication({
     collection: collections.tasks,
     //   /**
@@ -79,7 +81,13 @@ const setupDB = async () => {
 
   new SupabaseReplication({
     collection: collections.tags,
-    replicationIdentifier: "tags" + import.meta.env.REACT_APP_SUPABASE_URL, // TODO: Add Supabase user ID?
+    replicationIdentifier: "tags" + import.meta.env.REACT_APP_SUPABASE_URL,
+    ...defaultReplicationOptions,
+  });
+
+  new SupabaseReplication({
+    collection: collections.settings,
+    replicationIdentifier: "settings" + import.meta.env.REACT_APP_SUPABASE_URL,
     ...defaultReplicationOptions,
   });
 

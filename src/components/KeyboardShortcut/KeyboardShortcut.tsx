@@ -5,18 +5,10 @@ import { Fragment } from "react";
 
 import { Box } from "@mui/material";
 
+import { getIcon } from "./utils";
+
 export type KeyboardShortcutProps = {
   keys: ("up" | "down" | string)[];
-};
-
-const getIcon = (key: "up" | "down" | string) => {
-  switch (key) {
-    case "up":
-      return "\u2191";
-    case "down":
-      return "\u2193";
-  }
-  return key;
 };
 
 const KeyboardShortcut = ({ keys }: KeyboardShortcutProps) => {

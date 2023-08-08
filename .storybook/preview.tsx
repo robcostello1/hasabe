@@ -3,7 +3,7 @@ import "../src/index.css";
 
 import React from "react";
 
-import Theme from "../src/components/Theme";
+import { Theme } from "../src/components";
 
 const preview: Preview = {
   parameters: {

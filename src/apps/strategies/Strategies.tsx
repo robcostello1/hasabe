@@ -1,13 +1,12 @@
-import { FormContainer, TextFieldElement } from "react-hook-form-mui";
-
-import { Button, Card, CardContent, Typography } from "@mui/material";
-
-import Theme from "../../components/Theme";
-import { useLocalStorage } from "react-use";
-import { Refresh } from "@mui/icons-material";
-import { useCallback, useState } from "react";
-
 import "./Strategies.css";
+
+import { Theme } from "components";
+import { useCallback, useState } from "react";
+import { FormContainer, TextFieldElement } from "react-hook-form-mui";
+import { useLocalStorage } from "react-use";
+
+import { Refresh } from "@mui/icons-material";
+import { Button, Card, CardContent, Typography } from "@mui/material";
 
 const defaultStrategies = ["Include yourself"];
 
