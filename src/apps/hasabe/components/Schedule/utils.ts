@@ -1,6 +1,6 @@
-import { enumKeys } from '../utils/types';
-import { arrayRotate } from '../utils/utils';
-import { Day, Days, Period } from './types';
+import { enumKeys } from "../../utils/types";
+import { arrayRotate } from "../../utils/utils";
+import { Day, Days, Period } from "./types";
 
 const periodDefinition: Record<Period, number> = {
   evening: Date.parse("01 Jan 1970 18:0:00 GMT"),

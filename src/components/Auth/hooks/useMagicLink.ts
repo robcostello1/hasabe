@@ -2,36 +2,34 @@ import { useCallback, useContext, useState } from "react";
 
 import { AuthError } from "@supabase/supabase-js";
 
-import { supabaseClient } from "../../../utils/db";
+import { supabaseClient } from "../../../apps/hasabe/utils/db";
 import { AuthContext } from "../AuthContext";
 
-type UseLoginProps = {
+type UseMagicLinkProps = {
   onSuccess?: () => void;
 };
 
-export const useLogin = ({ onSuccess }: UseLoginProps) => {
-  const [loginError, setLoginError] = useState<AuthError>();
+export const useMagicLink = ({ onSuccess }: UseMagicLinkProps) => {
+  const [magicLinkError, setMagicLinkError] = useState<AuthError>();
   const { setAuthenticated } = useContext(AuthContext);
 
-  const handleLogin = useCallback(
+  const handleMagicLink = useCallback(
     async (credentials: { email: string; password: string }) => {
-      const { error } = await supabaseClient.auth.signInWithPassword(
-        credentials
-      );
+      const { error } = await supabaseClient.auth.signInWithOtp(credentials);
 
       if (error) {
-        setLoginError(error);
+        setMagicLinkError(error);
       } else {
         onSuccess?.();
         setAuthenticated(true);
-        setLoginError(undefined);
+        setMagicLinkError(undefined);
       }
     },
     [onSuccess, setAuthenticated]
   );
 
   return {
-    loginError,
-    handleLogin,
+    magicLinkError,
+    handleMagicLink,
   };
 };

@@ -1,0 +1,15 @@
+.LoginRoot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.LoginRoot > form {
+  min-width: 24rem;
+}
+
+.LoginAlert {
+  margin-bottom: 2rem;
+}
