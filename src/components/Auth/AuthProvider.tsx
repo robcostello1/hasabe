@@ -1,9 +1,9 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState } from "react";
 
-import { Session, User } from '@supabase/supabase-js';
+import { Session, User } from "@supabase/supabase-js";
 
-import { AuthContext } from './AuthContext';
-import { useSession } from './hooks';
+import { AuthContext } from "./AuthContext";
+import { useSession } from "./hooks";
 
 type AuthProviderProps = {
   children: React.ReactNode;

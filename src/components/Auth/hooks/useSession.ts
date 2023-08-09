@@ -23,6 +23,7 @@ export const useSession = ({ onSuccess }: UseSessionProps) => {
         setSession(null);
         return;
       }
+
       onSuccess?.(data.session);
       setSession(data.session);
     })();
