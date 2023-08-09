@@ -2,7 +2,7 @@ import { useCallback, useContext, useState } from "react";
 
 import { AuthError } from "@supabase/supabase-js";
 
-import { supabaseClient } from "../../../utils/db";
+import { supabaseClient } from "../../../apps/hasabe/utils/db";
 import { AuthContext } from "../AuthContext";
 
 type UseLoginProps = {

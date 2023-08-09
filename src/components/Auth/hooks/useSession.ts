@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { Session } from "@supabase/supabase-js";
 
-import { supabaseClient } from "../../../utils/db";
+import { supabaseClient } from "../../../apps/hasabe/utils/db";
 
 type UseSessionProps = {
   onSuccess?: (session: Session) => void;

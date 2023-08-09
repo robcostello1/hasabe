@@ -1,12 +1,12 @@
-import './TaskFilters.css';
+import "./TaskFilters.css";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-import { TextField } from '@mui/material';
+import { TextField } from "@mui/material";
 
-import ScheduleUi from '../../../Schedule/ScheduleUi';
-import { Tag } from '../../../utils/types';
-import { TagList } from '../../Tags';
+import { Tag } from "../../../utils/types";
+import ScheduleUi from "../../Schedule/ScheduleUi";
+import { TagList } from "../../Tags";
 
 type TaskFiltersProps = {
   availableTags: Tag[];

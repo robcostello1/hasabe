@@ -1,8 +1,14 @@
-import './Calendar.css';
+import "./Calendar.css";
 
-import { TagSelectorField } from '../../components/Forms/TagSelector';
-import { enumKeys, Tag } from '../../utils/types';
-import { CalendarChangePayload, CalendarState, Day, Days, Periods } from '../types';
+import { enumKeys, Tag } from "../../../utils/types";
+import { TagSelectorField } from "../../Forms/TagSelector";
+import {
+  CalendarChangePayload,
+  CalendarState,
+  Day,
+  Days,
+  Periods,
+} from "../types";
 
 type CalendarProps = {
   availableTags: Tag[];

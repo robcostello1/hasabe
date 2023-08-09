@@ -3,7 +3,7 @@ import { useState } from "react";
 import { AccountCircle } from "@mui/icons-material";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 
-import { useLogout } from "../Auth/hooks";
+import { useLogout } from "../../../../components/Auth/hooks";
 
 const UserActions = (_: {}) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
