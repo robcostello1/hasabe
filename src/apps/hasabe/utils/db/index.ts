@@ -24,8 +24,6 @@ export const supabaseClient = createClient(
   import.meta.env.VITE_SUPABASE_KEY!
 );
 
-export type DbTables = "tasks" | "tags";
-
 const setupDB = async () => {
   // Create your database
   const db = await createRxDatabase({
